@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://ozoneo0.cn/schedule/index.html</loc>
+    <loc>https://ozoneo0.cn/2023/09/21/test/</loc>
     
-    <lastmod>2023-10-17</lastmod>
+    <lastmod>2024-01-08</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://ozoneo0.cn/2023/09/21/test/</loc>
+    <loc>https://ozoneo0.cn/schedule/index.html</loc>
     
     <lastmod>2023-10-17</lastmod>
     
@@ -67,7 +67,7 @@
 
   <url>
     <loc>https://ozoneo0.cn/</loc>
-    <lastmod>2023-10-17</lastmod>
+    <lastmod>2024-01-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
