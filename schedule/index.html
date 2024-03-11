@@ -14,10 +14,11 @@
 
 <link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ozoneo0.cn","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"ozoneo0.cn","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="2024想起来就更January21 阴间时间赶飞机，我是大兴机场受害者 睡了一觉之后就又赶飞机了，只有一根鼓棒的我的背包像一个巨大的小灵通，我那么大的另外一根鼓棒呢（比划） 终于回家了，又熟悉又陌生的感觉，，听到久违的乡音才觉得，“啊，这味儿对了nei~”，见到爸妈感觉他们什么都没变又好像变了些什么，时间到底是要快点走还是慢点走好呢 回到房间还是有点奇怪，我妈说是帮我收拾房间我怎么感觉比我走之前">
@@ -214,6 +215,7 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -385,45 +387,6 @@
 <script type="text/javascript" src="/dist/APlayer.min.js"></script>
 <script type="text/javascript" src="/dist/music.js"></script>
 
-<script>
-    ap = null
-    Object.defineProperty(document.querySelector('meting-js'),"aplayer",{
-        set: function(aplayer) {
-            ap=aplayer
-            ready();
-        }
-    });
-    isRecover = false;
-    function ready(){
-        ap.on('canplay', function () {
-            if(!isRecover){
-                if(localStorage.getItem("musicIndex") != null){
-                    musicIndex = localStorage.getItem("musicIndex");
-                    musicTime = localStorage.getItem("musicTime");
-                    if(ap.list.index != musicIndex){
-                        ap.list.switch(musicIndex);
-                    }else{
-                        ap.seek(musicTime);
-                        ap.play();
-                        localStorage.clear();
-                        isRecover = true;
-                    }
-                }else{
-                    isRecover = true;
-                }
-            }
-        });
-    }
-    window.onbeforeunload = function(event) {
-        if(!ap.audio.paused){
-            musicIndex = ap.list.index;
-            musicTime = ap.audio.currentTime;
-            localStorage.setItem("musicIndex",musicIndex);
-            localStorage.setItem("musicTime",musicTime);
-        }
-    };
-</script>
-
     </div>
   </aside>
   <div id="sidebar-dimmer"></div>
@@ -473,6 +436,9 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
@@ -486,11 +452,70 @@
 
 <script src="/js/next-boot.js"></script>
 
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
   
-  <script>
+  <script data-pjax>
     (function(){
       var canonicalURL, curProtocol;
       //Get the <link> tag
@@ -534,6 +559,7 @@
 
 
 
+    <div id="pjax">
   
 
   
@@ -558,5 +584,6 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
 });
 </script>
 
+    </div>
 </body>
 </html>
