@@ -203,7 +203,7 @@ body {
   height: 100%;
 }
 body {
-  cursor: url("/images/1shubiao.ani"), auto !important;
+  cursor: url("/images/Arrow.cur"), auto !important;
   background: var(--body-bg-color);
   color: var(--text-color);
   font-family: 'Noto Serif SC', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -250,7 +250,7 @@ p {
 }
 a,
 span.exturl {
-  cursor: url("/images/2shubiao.ani"), auto !important;
+  cursor: url("/images/Link.cur"), auto !important;
   border-bottom: 1px solid #ccc;
   color: #fff;
   outline: 0;
@@ -1231,7 +1231,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #2d0522;
+  background: #ff82ff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
