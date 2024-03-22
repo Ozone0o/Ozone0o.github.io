@@ -20,19 +20,19 @@ const ap = new APlayer({
             artist: '椎名林檎',
             url: 'http://music.163.com/song/media/outer/url?id=1381350481.mp3',
             cover: 'http://p1.music.126.net/W4JdzEv6rWH-9axhEUGW3w==/719080604577566.jpg?param=130y130',
-        }
+},
         {
             name: 'Value',
             artist: 'Ado',
             url: 'http://music.163.com/song/media/outer/url?id=2129117330.mp3',
             cover: 'http://p1.music.126.net/7gzYj1itC6BpKDlk6sZtTA==/109951169359997375.jpg?param=130y130',
-        }
+        },
         {
             name: 'Sorrowful',
             artist: 'WHIZZ',
             url: 'http://music.163.com/song/media/outer/url?id=1861779056.mp3',
             cover: 'http://p1.music.126.net/EElO6OYMbcAVJOzcyuB-rA==/109951166185185693.jpg?param=130y130',
-        }
+        },
         {
             name: '波兰首都是上海',
             artist: 'yourboyfriendsucks!',
