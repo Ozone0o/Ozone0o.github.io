@@ -20,7 +20,7 @@ const ap = new APlayer({
             artist: '椎名林檎',
             url: 'http://music.163.com/song/media/outer/url?id=1381350481.mp3',
             cover: 'http://p1.music.126.net/W4JdzEv6rWH-9axhEUGW3w==/719080604577566.jpg?param=130y130',
-},
+        },
         {
             name: 'Value',
             artist: 'Ado',
@@ -38,6 +38,12 @@ const ap = new APlayer({
             artist: 'yourboyfriendsucks!',
             url: 'http://music.163.com/song/media/outer/url?id=419596181.mp3',
             cover: 'http://p2.music.126.net/S0NDCxJ7__2DuC3q8rHm_A==/109951164419258439.jpg?param=130y130',
+        },
+        {
+            name: 'Have You Ever',
+            artist: 'mindfreakkk',
+            url: 'http://music.163.com/song/media/outer/url?id=1842735440.mp3',
+            cover: 'http://p2.music.126.net/DxA_1eMyZiyse4Ed8IXgOA==/109951165953588453.jpg?param=130y130',
         }
     ]
 });
