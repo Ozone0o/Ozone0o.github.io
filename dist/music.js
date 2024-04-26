@@ -28,12 +28,6 @@ const ap = new APlayer({
             cover: 'http://p1.music.126.net/7gzYj1itC6BpKDlk6sZtTA==/109951169359997375.jpg?param=130y130',
         },
         {
-            name: 'Sorrowful',
-            artist: 'WHIZZ',
-            url: 'http://music.163.com/song/media/outer/url?id=1861779056.mp3',
-            cover: 'http://p1.music.126.net/EElO6OYMbcAVJOzcyuB-rA==/109951166185185693.jpg?param=130y130',
-        },
-        {
             name: '波兰首都是上海',
             artist: 'yourboyfriendsucks!',
             url: 'http://music.163.com/song/media/outer/url?id=419596181.mp3',
