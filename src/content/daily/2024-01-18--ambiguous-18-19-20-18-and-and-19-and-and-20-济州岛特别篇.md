@@ -1,0 +1,20 @@
+---
+date: 2024-01-18
+itemCount: 3
+sourceOrderStart: 47
+sourceOrderEnd: 49
+dateResolution: ambiguous
+legacyDateLabel: 18 && 19 && 20（济州岛特别篇）
+dateCandidates:
+  - 2024-01-18
+  - 2024-01-19
+  - 2024-01-20
+lang: zh
+legacy: true
+legacyPath: /schedule/
+sourceFile: schedule/index.html
+---
+
+- 快递送错了我还跑过去拿，真是清澈的大学生
+- 头一次自己去换外汇，神奇（我卡里那么多钱怎么就变成三张纸钞了啊啊啊——）
+- 时隔很久的一次出国~（应该也会写一篇博客（挖坑ing——

@@ -1,16 +1,954 @@
 {
-  "status": "NOT_RUN",
-  "generatedAt": null,
+  "generatedAt": "2026-09-03T03:43:51.115Z",
+  "status": "NEEDS_REVIEW",
   "legacy": {
     "site": "https://ozoneo0.cn",
-    "totalPostCount": 0,
-    "totalDailyItemCount": 0,
-    "totalDailyDateCount": 0
+    "snapshotBranch": "legacy-hexo",
+    "snapshotSha": "e13d02d3d1dc78cb0d5dc8ad005cc1537c6cf77e",
+    "totalPostCount": 14,
+    "totalDailyItemCount": 66,
+    "totalDailyDateCount": 27,
+    "exactDailyDateCount": 25,
+    "ambiguousDailyDateCount": 2,
+    "referencedLocalImageCount": 0,
+    "referencedRemoteImageCount": 4
   },
-  "writing": { "entries": [] },
-  "daily": { "entries": [] },
-  "media": { "copiedLocalFiles": [], "missingLocalFiles": [], "remoteMediaUrls": [] },
-  "warnings": ["Migration has not been run yet."],
+  "writing": {
+    "totalCount": 14,
+    "migratedCount": 14,
+    "entries": [
+      {
+        "sourceFile": "2023/09/21/test/index.html",
+        "title": "test",
+        "date": "2023-09-21",
+        "destination": "/writing/test/",
+        "legacyPath": "/2023/09/21/test/",
+        "warnings": [],
+        "updated": "2024-01-13",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/01/13/pic/index.html",
+        "title": "by",
+        "date": "2024-01-13",
+        "destination": "/writing/by/",
+        "legacyPath": "/2024/01/13/pic/",
+        "warnings": [],
+        "updated": "2024-01-13",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 1,
+        "localImageCount": 0,
+        "remoteImageCount": 1,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/01/14/2023年度总结/index.html",
+        "title": "2023年度总结",
+        "date": "2024-01-14",
+        "destination": "/writing/2023年度总结/",
+        "legacyPath": "/2024/01/14/2023%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/",
+        "warnings": [],
+        "updated": "2024-01-24",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 1,
+        "localImageCount": 0,
+        "remoteImageCount": 1,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/01/25/我很好奇天津的城市规划/index.html",
+        "title": "我很好奇天津的城市规划",
+        "date": "2024-01-25",
+        "destination": "/writing/我很好奇天津的城市规划/",
+        "legacyPath": "/2024/01/25/%E6%88%91%E5%BE%88%E5%A5%BD%E5%A5%87%E5%A4%A9%E6%B4%A5%E7%9A%84%E5%9F%8E%E5%B8%82%E8%A7%84%E5%88%92/",
+        "warnings": [],
+        "updated": "2024-02-03",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/02/03/100人次纪念（！）/index.html",
+        "title": "100人次纪念（！）",
+        "date": "2024-02-03",
+        "destination": "/writing/100人次纪念/",
+        "legacyPath": "/2024/02/03/100%E4%BA%BA%E6%AC%A1%E7%BA%AA%E5%BF%B5%EF%BC%88%EF%BC%81%EF%BC%89/",
+        "warnings": [],
+        "updated": "2024-02-03",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 1,
+        "localImageCount": 0,
+        "remoteImageCount": 1,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/02/04/盒与被盒的关系/index.html",
+        "title": "盒与被盒的关系",
+        "date": "2024-02-04",
+        "destination": "/writing/盒与被盒的关系/",
+        "legacyPath": "/2024/02/04/%E7%9B%92%E4%B8%8E%E8%A2%AB%E7%9B%92%E7%9A%84%E5%85%B3%E7%B3%BB/",
+        "warnings": [],
+        "updated": "2024-02-04",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/03/12/回家是最好的礼物/index.html",
+        "title": "回家是最好的礼物~",
+        "date": "2024-03-12",
+        "destination": "/writing/回家是最好的礼物/",
+        "legacyPath": "/2024/03/12/%E5%9B%9E%E5%AE%B6%E6%98%AF%E6%9C%80%E5%A5%BD%E7%9A%84%E7%A4%BC%E7%89%A9/",
+        "warnings": [],
+        "updated": "2024-03-12",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/03/12/（我的）小破站有新版面了！？/index.html",
+        "title": "（我的）小破站有新版面了！？",
+        "date": "2024-03-12",
+        "destination": "/writing/我的-小破站有新版面了/",
+        "legacyPath": "/2024/03/12/%EF%BC%88%E6%88%91%E7%9A%84%EF%BC%89%E5%B0%8F%E7%A0%B4%E7%AB%99%E6%9C%89%E6%96%B0%E7%89%88%E9%9D%A2%E4%BA%86%EF%BC%81%EF%BC%9F/",
+        "warnings": [],
+        "updated": "2024-03-12",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 1,
+        "localImageCount": 0,
+        "remoteImageCount": 1,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/04/09/是优绩主义的培养皿吗/index.html",
+        "title": "...是优绩主义的培养皿吗?",
+        "date": "2024-04-09",
+        "destination": "/writing/是优绩主义的培养皿吗/",
+        "legacyPath": "/2024/04/09/%E6%98%AF%E4%BC%98%E7%BB%A9%E4%B8%BB%E4%B9%89%E7%9A%84%E5%9F%B9%E5%85%BB%E7%9A%BF%E5%90%97/",
+        "warnings": [],
+        "updated": "2024-04-22",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/04/22/daydream/index.html",
+        "title": "Is it a daydream?",
+        "date": "2024-04-22",
+        "destination": "/writing/is-it-a-daydream/",
+        "legacyPath": "/2024/04/22/daydream/",
+        "warnings": [],
+        "updated": "2024-04-23",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/05/06/异频共振/index.html",
+        "title": "异频共振",
+        "date": "2024-05-06",
+        "destination": "/writing/异频共振/",
+        "legacyPath": "/2024/05/06/%E5%BC%82%E9%A2%91%E5%85%B1%E6%8C%AF/",
+        "warnings": [],
+        "updated": "2024-05-27",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/05/06/当我谈骑行时我谈些什么/index.html",
+        "title": "当我谈骑行时我谈些什么",
+        "date": "2024-05-06",
+        "destination": "/writing/当我谈骑行时我谈些什么/",
+        "legacyPath": "/2024/05/06/%E5%BD%93%E6%88%91%E8%B0%88%E9%AA%91%E8%A1%8C%E6%97%B6%E6%88%91%E8%B0%88%E4%BA%9B%E4%BB%80%E4%B9%88/",
+        "warnings": [],
+        "updated": "2024-05-06",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/06/01/自恋狂自救指＿南/index.html",
+        "title": "自恋狂自救指＿南",
+        "date": "2024-06-01",
+        "destination": "/writing/自恋狂自救指-南/",
+        "legacyPath": "/2024/06/01/%E8%87%AA%E6%81%8B%E7%8B%82%E8%87%AA%E6%95%91%E6%8C%87%EF%BC%BF%E5%8D%97/",
+        "warnings": [],
+        "updated": "2024-06-02",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      },
+      {
+        "sourceFile": "2024/10/22/夏天已经过完了，好像什么事情都没有做/index.html",
+        "title": "夏天已经过完了，好像什么事情都没有做",
+        "date": "2024-10-22",
+        "destination": "/writing/夏天已经过完了-好像什么事情都没有做/",
+        "legacyPath": "/2024/10/22/%E5%A4%8F%E5%A4%A9%E5%B7%B2%E7%BB%8F%E8%BF%87%E5%AE%8C%E4%BA%86%EF%BC%8C%E5%A5%BD%E5%83%8F%E4%BB%80%E4%B9%88%E4%BA%8B%E6%83%85%E9%83%BD%E6%B2%A1%E6%9C%89%E5%81%9A/",
+        "warnings": [],
+        "updated": "2024-10-23",
+        "textValidationResult": "PASS",
+        "checks": {
+          "title": true,
+          "publishedDate": true,
+          "legacyPath": true,
+          "canonicalUrl": true,
+          "bodyNonEmpty": true,
+          "text": true,
+          "imageCount": true,
+          "remoteImageCount": true,
+          "localImageCount": true,
+          "linkCount": true
+        },
+        "imageCount": 0,
+        "localImageCount": 0,
+        "remoteImageCount": 0,
+        "linkCount": 0,
+        "migratedLinkCount": 0,
+        "difference": null,
+        "failureReasons": []
+      }
+    ]
+  },
+  "daily": {
+    "sourceFile": "schedule/index.html",
+    "legacyItems": 66,
+    "migratedItems": 66,
+    "migratedDateGroups": 27,
+    "exactDateGroups": 25,
+    "ambiguousDateGroups": 2,
+    "unresolvedItems": [],
+    "entries": [
+      {
+        "date": "2024-01-13",
+        "legacyDateLabel": "2024-01-13",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-01-13"
+        ],
+        "itemCount": 4,
+        "sourceOrderStart": 63,
+        "sourceOrderEnd": 66,
+        "destination": "src/content/daily/2024-01-13.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-01-14",
+        "legacyDateLabel": "2024-01-14",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-01-14"
+        ],
+        "itemCount": 4,
+        "sourceOrderStart": 59,
+        "sourceOrderEnd": 62,
+        "destination": "src/content/daily/2024-01-14.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-01-15",
+        "legacyDateLabel": "2024-01-15",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-01-15"
+        ],
+        "itemCount": 5,
+        "sourceOrderStart": 54,
+        "sourceOrderEnd": 58,
+        "destination": "src/content/daily/2024-01-15.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-01-16",
+        "legacyDateLabel": "16 && 17 (天津特别篇)",
+        "dateResolution": "ambiguous",
+        "dateCandidates": [
+          "2024-01-16",
+          "2024-01-17"
+        ],
+        "itemCount": 4,
+        "sourceOrderStart": 50,
+        "sourceOrderEnd": 53,
+        "destination": "src/content/daily/2024-01-16--ambiguous-16-17-16-and-and-17-天津特别篇.md",
+        "validationResult": "REVIEW: ambiguous date heading",
+        "mismatch": []
+      },
+      {
+        "date": "2024-01-18",
+        "legacyDateLabel": "18 && 19 && 20（济州岛特别篇）",
+        "dateResolution": "ambiguous",
+        "dateCandidates": [
+          "2024-01-18",
+          "2024-01-19",
+          "2024-01-20"
+        ],
+        "itemCount": 3,
+        "sourceOrderStart": 47,
+        "sourceOrderEnd": 49,
+        "destination": "src/content/daily/2024-01-18--ambiguous-18-19-20-18-and-and-19-and-and-20-济州岛特别篇.md",
+        "validationResult": "REVIEW: ambiguous date heading",
+        "mismatch": []
+      },
+      {
+        "date": "2024-01-21",
+        "legacyDateLabel": "2024-01-21",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-01-21"
+        ],
+        "itemCount": 5,
+        "sourceOrderStart": 42,
+        "sourceOrderEnd": 46,
+        "destination": "src/content/daily/2024-01-21.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-03-11",
+        "legacyDateLabel": "2024-03-11",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-03-11"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 40,
+        "sourceOrderEnd": 41,
+        "destination": "src/content/daily/2024-03-11.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-03-22",
+        "legacyDateLabel": "2024-03-22",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-03-22"
+        ],
+        "itemCount": 4,
+        "sourceOrderStart": 36,
+        "sourceOrderEnd": 39,
+        "destination": "src/content/daily/2024-03-22.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-03-25",
+        "legacyDateLabel": "2024-03-25",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-03-25"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 34,
+        "sourceOrderEnd": 35,
+        "destination": "src/content/daily/2024-03-25.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-02",
+        "legacyDateLabel": "2024-04-02",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-02"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 32,
+        "sourceOrderEnd": 33,
+        "destination": "src/content/daily/2024-04-02.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-16",
+        "legacyDateLabel": "2024-04-16",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-16"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 30,
+        "sourceOrderEnd": 31,
+        "destination": "src/content/daily/2024-04-16.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-22",
+        "legacyDateLabel": "2024-04-22",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-22"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 28,
+        "sourceOrderEnd": 29,
+        "destination": "src/content/daily/2024-04-22.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-23",
+        "legacyDateLabel": "2024-04-23",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-23"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 27,
+        "sourceOrderEnd": 27,
+        "destination": "src/content/daily/2024-04-23.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-26",
+        "legacyDateLabel": "2024-04-26",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-26"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 26,
+        "sourceOrderEnd": 26,
+        "destination": "src/content/daily/2024-04-26.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-04-28",
+        "legacyDateLabel": "2024-04-28",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-04-28"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 24,
+        "sourceOrderEnd": 25,
+        "destination": "src/content/daily/2024-04-28.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-05-05",
+        "legacyDateLabel": "2024-05-05",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-05-05"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 22,
+        "sourceOrderEnd": 23,
+        "destination": "src/content/daily/2024-05-05.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-05-06",
+        "legacyDateLabel": "2024-05-06",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-05-06"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 21,
+        "sourceOrderEnd": 21,
+        "destination": "src/content/daily/2024-05-06.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-05-27",
+        "legacyDateLabel": "2024-05-27",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-05-27"
+        ],
+        "itemCount": 3,
+        "sourceOrderStart": 18,
+        "sourceOrderEnd": 20,
+        "destination": "src/content/daily/2024-05-27.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-06-03",
+        "legacyDateLabel": "2024-06-03",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-06-03"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 17,
+        "sourceOrderEnd": 17,
+        "destination": "src/content/daily/2024-06-03.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-08-27",
+        "legacyDateLabel": "2024-08-27",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-08-27"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 15,
+        "sourceOrderEnd": 16,
+        "destination": "src/content/daily/2024-08-27.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-09-07",
+        "legacyDateLabel": "2024-09-07",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-09-07"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 13,
+        "sourceOrderEnd": 14,
+        "destination": "src/content/daily/2024-09-07.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-09-29",
+        "legacyDateLabel": "2024-09-29",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-09-29"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 12,
+        "sourceOrderEnd": 12,
+        "destination": "src/content/daily/2024-09-29.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-09-30",
+        "legacyDateLabel": "2024-09-30",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-09-30"
+        ],
+        "itemCount": 3,
+        "sourceOrderStart": 9,
+        "sourceOrderEnd": 11,
+        "destination": "src/content/daily/2024-09-30.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-10-13",
+        "legacyDateLabel": "2024-10-13",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-10-13"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 7,
+        "sourceOrderEnd": 8,
+        "destination": "src/content/daily/2024-10-13.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-10-22",
+        "legacyDateLabel": "2024-10-22",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-10-22"
+        ],
+        "itemCount": 2,
+        "sourceOrderStart": 5,
+        "sourceOrderEnd": 6,
+        "destination": "src/content/daily/2024-10-22.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-10-25",
+        "legacyDateLabel": "2024-10-25",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-10-25"
+        ],
+        "itemCount": 1,
+        "sourceOrderStart": 4,
+        "sourceOrderEnd": 4,
+        "destination": "src/content/daily/2024-10-25.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      },
+      {
+        "date": "2024-11-05",
+        "legacyDateLabel": "2024-11-05",
+        "dateResolution": "exact",
+        "dateCandidates": [
+          "2024-11-05"
+        ],
+        "itemCount": 3,
+        "sourceOrderStart": 1,
+        "sourceOrderEnd": 3,
+        "destination": "src/content/daily/2024-11-05.md",
+        "validationResult": "PASS",
+        "mismatch": []
+      }
+    ],
+    "mismatchedEntries": []
+  },
+  "media": {
+    "copiedLocalFiles": [],
+    "missingLocalFiles": [],
+    "remoteMediaUrls": [
+      "https://cdn.jsdelivr.net/gh/Ozone0o/imgs-b/IMG_5296.jpg",
+      "https://cdn.jsdelivr.net/gh/Ozone0o/imgs-b/icon1-1710252519765-1.png",
+      "https://cdn.jsdelivr.net/gh/Ozone0o/imgs-b/screenshot-1706455747250.png",
+      "https://cdn.jsdelivr.net/gh/Ozone0o/imgs-b/test.jpg"
+    ],
+    "unsupportedUrls": []
+  },
+  "skippedNonPostPages": [
+    {
+      "sourceFile": "about/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2023/09/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2023/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/01/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/02/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/03/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/04/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/05/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/06/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/10/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/2024/page/2/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "archives/page/2/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "commonweal/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "index/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/CHANGELOG.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/README.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/example/forms.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/example/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/example/page2.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "lib/source/lib/pjax/example/page3.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "list/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "page/2/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    },
+    {
+      "sourceFile": "schedule/index.html",
+      "reason": "not a post page (page configuration isPost is false or absent)"
+    }
+  ],
+  "warnings": [
+    "2 Daily date group(s) require human date assignment review."
+  ],
   "errors": [],
-  "validation": { "status": "NOT_RUN" }
+  "validation": {
+    "status": "NEEDS_REVIEW",
+    "writingTotal": 14,
+    "writingMigrated": 14,
+    "writingPassed": 14,
+    "writingFailed": 0,
+    "dailyTotal": 66,
+    "dailyMigrated": 66,
+    "dailyTextOrder": "PASS",
+    "dailyDateResolution": "REVIEW",
+    "missingMedia": 0
+  }
 }
