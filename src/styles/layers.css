@@ -1,0 +1,424 @@
+.layer-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100svh - var(--header-height));
+  overflow: clip;
+}
+
+.layer-breadcrumb {
+  position: relative;
+  z-index: 20;
+  min-height: 40px;
+  padding: 17px var(--space-page) 0;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.layer-breadcrumb__mobile {
+  display: none;
+}
+
+.layer-shell__stage {
+  position: relative;
+  min-height: 800px;
+  margin-top: 0;
+}
+
+.layer-field {
+  position: relative;
+  display: block;
+  color: var(--ink);
+  background: var(--field-fill);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-decoration: none;
+  transform: rotate(var(--rotation, 0deg));
+  transform-origin: top left;
+}
+
+:root[data-theme='dark'] .layer-field {
+  border: 3px solid var(--field-accent, var(--line));
+}
+
+.layer-field--projects {
+  --field-fill: var(--field-projects);
+  --field-accent: var(--field-projects);
+}
+
+.layer-field--daily {
+  --field-fill: var(--field-daily);
+  --field-accent: var(--field-daily);
+}
+
+.layer-field--archive {
+  --field-fill: var(--field-archive);
+  --field-accent: var(--field-archive);
+}
+
+.layer-field--about {
+  --field-fill: var(--field-about);
+  --field-accent: var(--field-about);
+}
+
+.layer-field--writing {
+  --field-fill: var(--field-writing);
+  --field-accent: var(--field-writing);
+}
+
+.layer-field--active {
+  position: absolute;
+  z-index: 5;
+}
+
+.layer-field__content {
+  position: relative;
+  height: 100%;
+}
+
+.layer-field__label {
+  display: block;
+  color: var(--ink);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.layer-field__label--mono {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0;
+}
+
+.edge-layer {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  width: var(--edge-width);
+  height: var(--edge-height);
+  overflow: visible;
+  background: var(--field-fill);
+  transform: rotate(var(--edge-rotation, 0deg));
+}
+
+.edge-layer--projects {
+  --field-fill: var(--field-projects);
+}
+
+.edge-layer--daily {
+  --field-fill: var(--field-daily);
+}
+
+.edge-layer--archive {
+  --field-fill: var(--field-archive);
+}
+
+.edge-layer--about {
+  --field-fill: var(--field-about);
+}
+
+.edge-layer__link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.edge-layer__label {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  white-space: nowrap;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.edge-layer--about {
+  width: clamp(70px, 7.64vw, 110px);
+}
+
+.edge-layer--about .edge-layer__label {
+  left: 14px;
+}
+
+.layer-shell--article .edge-layer--archive {
+  width: clamp(80px, 13.9vw, 200px);
+  height: 140px;
+  z-index: 6;
+}
+
+.article-sheet {
+  position: relative;
+  z-index: 5;
+}
+
+.layer-shell--article .edge-layer--archive .edge-layer__label {
+  left: 18px;
+}
+
+.is-dragging {
+  cursor: grabbing !important;
+  user-select: none;
+  transition: none !important;
+}
+
+[data-draggable-layer] {
+  cursor: grab;
+  touch-action: none;
+}
+
+[data-layer-link]:focus-visible,
+.edge-layer__link:focus-visible,
+.layer-field:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+@media (min-width: 701px) {
+  .layer-shell--projects .layer-shell__stage {
+    min-height: 1060px;
+  }
+
+  .layer-shell--daily .layer-shell__stage {
+    min-height: 1290px;
+  }
+
+  .layer-shell--archive .layer-shell__stage {
+    min-height: 1740px;
+  }
+
+  .layer-shell--about .layer-shell__stage {
+    min-height: 1100px;
+  }
+
+  .layer-shell--projects .layer-field--active {
+    top: 22px;
+    right: clamp(32px, 8.333vw, 120px);
+    left: clamp(32px, 8.333vw, 120px);
+    min-height: min(955px, 66.32vw);
+    transform: rotate(1deg);
+  }
+
+  .layer-shell--daily .layer-field--active {
+    top: 27px;
+    right: clamp(32px, 7.292vw, 105px);
+    left: clamp(32px, 7.292vw, 105px);
+    min-height: min(1180px, 82vw);
+    transform: rotate(-1deg);
+  }
+
+  .layer-shell--archive .layer-field--active {
+    top: 25px;
+    right: clamp(32px, 6.597vw, 95px);
+    left: clamp(32px, 6.597vw, 95px);
+    min-height: min(1605px, 111.46vw);
+    transform: rotate(0.5deg);
+  }
+
+  .layer-shell--about .layer-field--active {
+    top: 45px;
+    right: clamp(32px, 10.069vw, 145px);
+    left: clamp(32px, 10.069vw, 145px);
+    min-height: min(900px, 62.5vw);
+    transform: rotate(2deg);
+  }
+
+  .layer-shell--projects .edge-layer--daily,
+  .layer-shell--daily .edge-layer--projects,
+  .layer-shell--archive .edge-layer--daily,
+  .layer-shell--about .edge-layer--daily {
+    top: 102px;
+    left: 0;
+  }
+
+  .layer-shell--projects .edge-layer--archive,
+  .layer-shell--daily .edge-layer--archive,
+  .layer-shell--about .edge-layer--archive {
+    top: 257px;
+    left: 0;
+  }
+
+  .layer-shell--projects .edge-layer--about,
+  .layer-shell--daily .edge-layer--about,
+  .layer-shell--archive .edge-layer--about {
+    top: 102px;
+    right: 0;
+  }
+
+  .layer-shell--archive .edge-layer--projects,
+  .layer-shell--about .edge-layer--projects {
+    top: 257px;
+    left: 0;
+  }
+
+  .layer-shell--article .layer-shell__stage {
+    min-height: 1848px;
+  }
+
+  .layer-shell--article .article-sheet {
+    top: 33px;
+    right: auto;
+    left: auto;
+    width: calc(100% - 2 * clamp(32px, 11.806vw, 170px));
+    margin-inline: clamp(32px, 11.806vw, 170px);
+    min-height: 1640px;
+  }
+
+  .layer-shell--article .edge-layer--archive {
+    top: 89px;
+    right: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --header-height: 43px;
+    --edge-width: 12px;
+    --edge-height: 180px;
+  }
+
+  .layer-shell {
+    overflow: clip;
+  }
+
+  .layer-breadcrumb {
+    min-height: 32px;
+    padding: 10px 18px 0;
+    font-size: 0.5625rem;
+  }
+
+  .layer-breadcrumb__desktop {
+    display: none;
+  }
+
+  .layer-breadcrumb__mobile {
+    display: inline;
+  }
+
+  .layer-shell__stage {
+    min-height: 800px;
+  }
+
+  .layer-shell--projects .layer-shell__stage,
+  .layer-shell--archive .layer-shell__stage,
+  .layer-shell--about .layer-shell__stage {
+    min-height: 1180px;
+  }
+
+  .layer-shell--projects .layer-shell__stage {
+    min-height: 1105px;
+  }
+
+  .layer-shell--daily .layer-shell__stage {
+    min-height: 1350px;
+  }
+
+  .layer-shell--projects .layer-field--active {
+    top: 15px;
+    right: 18px;
+    left: 18px;
+    min-height: 1000px;
+    transform: rotate(1deg);
+  }
+
+  .layer-shell--daily .layer-field--active {
+    top: 15px;
+    right: 18px;
+    left: 18px;
+    min-height: 1050px;
+    transform: rotate(-1deg);
+  }
+
+  .layer-shell--archive .layer-shell__stage {
+    min-height: 1800px;
+  }
+
+  .layer-shell--archive .layer-field--active {
+    top: 15px;
+    right: 18px;
+    left: 18px;
+    min-height: 1650px;
+    transform: rotate(0.5deg);
+  }
+
+  .layer-shell--about .layer-shell__stage {
+    min-height: 1000px;
+  }
+
+  .layer-shell--about .layer-field--active {
+    top: 15px;
+    right: 18px;
+    left: 18px;
+    min-height: 850px;
+    transform: rotate(2deg);
+  }
+
+  .layer-shell--article .layer-shell__stage {
+    min-height: 1475px;
+  }
+
+  .layer-shell--article .article-sheet {
+    top: 15px;
+    right: auto;
+    left: auto;
+    width: auto;
+    margin-inline: 18px;
+    min-height: 1380px;
+  }
+
+  .layer-shell--projects .edge-layer--about {
+    top: -12px;
+    right: -1px;
+  }
+
+  .layer-shell--projects .edge-layer--archive {
+    top: 175px;
+    left: 9px;
+  }
+
+  .layer-shell--projects .edge-layer--daily {
+    top: 355px;
+    right: -1px;
+    left: auto;
+  }
+
+  .layer-shell--daily .edge-layer--projects,
+  .layer-shell--archive .edge-layer--projects,
+  .layer-shell--about .edge-layer--projects {
+    top: 165px;
+    left: 9px;
+  }
+
+  .layer-shell--daily .edge-layer--archive,
+  .layer-shell--archive .edge-layer--archive,
+  .layer-shell--about .edge-layer--archive {
+    top: 345px;
+    left: 9px;
+  }
+
+  .layer-shell--daily .edge-layer--about,
+  .layer-shell--archive .edge-layer--about,
+  .layer-shell--about .edge-layer--about {
+    top: -12px;
+    right: -1px;
+  }
+
+  .layer-shell--article .edge-layer--archive {
+    top: -13px;
+    right: -1px;
+    width: 92px;
+    height: 80px;
+    z-index: 20;
+  }
+
+  .layer-shell--article .edge-layer--archive .edge-layer__label {
+    left: 12px;
+  }
+}

@@ -1,0 +1,49 @@
+---
+export type LayerSection = 'projects' | 'daily' | 'archive' | 'about' | 'writing';
+
+interface Props {
+  section: LayerSection;
+  label?: string;
+  href?: string;
+  active?: boolean;
+  draggable?: boolean;
+  class?: string;
+  rotation?: string;
+  ariaLabel?: string;
+}
+
+const {
+  section,
+  label = section.toUpperCase(),
+  href,
+  active = false,
+  draggable = false,
+  class: className,
+  rotation = '0deg',
+  ariaLabel,
+} = Astro.props;
+
+const classes = ['layer-field', `layer-field--${section}`, active && 'layer-field--active', className];
+const attributes = {
+  'data-layer': section,
+  'data-layer-link': href ? 'true' : undefined,
+  'data-draggable-layer': draggable ? 'true' : undefined,
+  'data-active-layer': active ? 'true' : undefined,
+  'aria-label': ariaLabel ?? (!active && href ? `Open ${label}` : undefined),
+  style: `--rotation: ${rotation};`,
+};
+---
+
+{href ? (
+  <a class:list={classes} href={href} {...attributes}>
+    <div class="layer-field__content">
+      <slot />
+    </div>
+  </a>
+) : (
+  <section class:list={classes} {...attributes}>
+    <div class="layer-field__content">
+      <slot />
+    </div>
+  </section>
+)}

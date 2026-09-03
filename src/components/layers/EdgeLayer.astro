@@ -1,0 +1,17 @@
+---
+import type { LayerSection } from './LayerField.astro';
+
+interface Props {
+  section: LayerSection;
+  href: string;
+  label?: string;
+}
+
+const { section, href, label = section.toUpperCase() } = Astro.props;
+---
+
+<aside class:list={['edge-layer', `edge-layer--${section}`]} data-edge-layer={section}>
+  <a class="edge-layer__link" href={href} aria-label={`Open ${label}`} data-layer-link>
+    <span class="edge-layer__label">{label}</span>
+  </a>
+</aside>

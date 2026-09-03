@@ -1,0 +1,55 @@
+---
+import EdgeLayer from './EdgeLayer.astro';
+import LayerField, { type LayerSection } from './LayerField.astro';
+
+export type ActiveLayer = 'home' | LayerSection | 'article';
+
+interface Props {
+  active: ActiveLayer;
+  breadcrumb: string;
+  mobileBreadcrumb?: string;
+  class?: string;
+}
+
+const { active, breadcrumb, mobileBreadcrumb = breadcrumb, class: className } = Astro.props;
+const sections: Array<{ id: LayerSection; label: string; href: string }> = [
+  { id: 'projects', label: 'PROJECTS', href: '/projects/' },
+  { id: 'daily', label: 'DAILY', href: '/daily/' },
+  { id: 'archive', label: 'ARCHIVE', href: '/archive/' },
+  { id: 'about', label: 'ABOUT', href: '/about/' },
+];
+const edgeSections =
+  active === 'article'
+    ? sections.filter((section) => section.id === 'archive')
+    : active === 'home'
+      ? []
+      : sections.filter((section) => section.id !== active);
+---
+
+<div class:list={['layer-shell', `layer-shell--${active}`, className]} data-layer-root data-active-layer={active}>
+  <p class="layer-breadcrumb">
+    <span class="layer-breadcrumb__desktop">{breadcrumb}</span>
+    <span class="layer-breadcrumb__mobile">{mobileBreadcrumb}</span>
+  </p>
+  <div class="layer-shell__stage">
+    {edgeSections.map((section) => (
+      <EdgeLayer section={section.id} href={section.href} label={section.label} />
+    ))}
+
+    {active === 'home' ? (
+      <slot />
+    ) : active === 'article' ? (
+      <article class="article-sheet">
+        <div class="article-sheet__content">
+          <slot />
+        </div>
+      </article>
+    ) : (
+      <LayerField section={active as LayerSection} active ariaLabel={`${active.toUpperCase()} section`}>
+        <slot />
+      </LayerField>
+    )}
+  </div>
+</div>
+
+<script src="../../scripts/layer-interactions.ts"></script>

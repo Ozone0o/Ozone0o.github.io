@@ -1,0 +1,58 @@
+@media (prefers-reduced-motion: no-preference) {
+  .layer-field,
+  .edge-layer,
+  .article-sheet,
+  .archive-fragment,
+  .project-entry,
+  .theme-control,
+  .language-control {
+    transition:
+      transform var(--motion-duration) var(--motion-ease),
+      background-color var(--motion-duration-fast) ease,
+      color var(--motion-duration-fast) ease;
+  }
+
+  .layer-field:hover:not(.is-dragging) {
+    transform: translate3d(var(--hover-x, 0px), var(--hover-y, 0px), 0)
+      rotate(calc(var(--rotation, 0deg) + var(--hover-rotation, 0deg)));
+  }
+
+  .layer-field.is-dragging {
+    transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0)
+      rotate(var(--rotation, 0deg));
+  }
+
+  .edge-layer:hover {
+    transform: translate3d(var(--edge-hover-x, 0px), var(--edge-hover-y, 0px), 0)
+      rotate(var(--edge-rotation, 0deg));
+  }
+
+  .project-entry:hover {
+    transform: translateX(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .layer-field:hover:not(.is-dragging),
+  .edge-layer:hover,
+  .project-entry:hover {
+    transform: rotate(var(--rotation, 0deg));
+  }
+
+  .archive-fragment.archive-fragment:hover {
+    transform: rotate(var(--fragment-rotation));
+  }
+}

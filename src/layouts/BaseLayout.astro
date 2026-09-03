@@ -4,39 +4,158 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  canonical?: string;
+  activeSection?: string;
 }
 
 const {
   title,
-  description = 'Ozone Layer — a personal archive and writing space.',
+  description = 'Ozone Layer — a public layer for things being made, noticed, remembered, and left unfinished.',
+  canonical,
+  activeSection = 'home',
 } = Astro.props;
+
+const siteOrigin = Astro.site ?? new URL('https://ozoneo0.cn');
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteOrigin).href;
+const pageTitle = title.toLowerCase() === 'ozone layer' ? 'Ozone Layer' : `${title} — Ozone Layer`;
+const versionLabel = new Intl.DateTimeFormat('en-GB', {
+  month: '2-digit',
+  year: 'numeric',
+  timeZone: 'Asia/Shanghai',
+})
+  .format(new Date())
+  .replace('/', '.');
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light" data-language="zh">
   <head>
+    <script is:inline>
+      (() => {
+        try {
+          const root = document.documentElement;
+          const storedTheme = localStorage.getItem('ozone-layer-theme');
+          const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          const theme = storedTheme === 'dark' || storedTheme === 'light' ? storedTheme : systemTheme;
+          const language = localStorage.getItem('ozone-layer-language') === 'en' ? 'en' : 'zh';
+          root.dataset.theme = theme;
+          root.dataset.language = language;
+          root.lang = language === 'en' ? 'en' : 'zh-CN';
+        } catch {
+          // The first paint remains usable when storage is unavailable.
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
-    <title>{title} · Ozone Layer 2.0</title>
+    <meta name="theme-color" content="#F2EFE7" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={activeSection === 'article' ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{pageTitle}</title>
   </head>
-  <body>
+  <body data-active-section={activeSection}>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="site-title" href="/">Ozone Layer 2.0</a>
-        <nav aria-label="Primary navigation">
-          <a href="/writing/">Writing</a>
-          <a href="/daily/">Daily</a>
-          <a href="/archive/">Archive</a>
-          <a href="/migration-check/">Migration Check</a>
-        </nav>
+        <div class="site-brand">
+          <a class="site-title" href="/" aria-label="Ozone Layer home">OZONE LAYER</a>
+          <span class="site-separator" aria-hidden="true">/</span>
+          <span class="site-version">{versionLabel}</span>
+        </div>
+
+        <div class="site-controls" aria-label="Site controls">
+          <div class="control-group" aria-label="Language">
+            <button
+              class="control-button language-control"
+              type="button"
+              data-language-option="zh"
+              aria-pressed="true"
+              aria-label="Use Chinese interface"
+            >ZH</button>
+            <span class="control-group__separator" aria-hidden="true">/</span>
+            <button
+              class="control-button language-control"
+              type="button"
+              data-language-option="en"
+              aria-pressed="false"
+              aria-label="Use English interface"
+            >EN</button>
+          </div>
+          <div class="control-group" aria-label="Theme">
+            <button
+              class="control-button theme-control"
+              type="button"
+              data-theme-option="light"
+              aria-pressed="true"
+              aria-label="Use light theme"
+            >LIGHT</button>
+            <span class="control-group__separator" aria-hidden="true">/</span>
+            <button
+              class="control-button theme-control"
+              type="button"
+              data-theme-option="dark"
+              aria-pressed="false"
+              aria-label="Use dark theme"
+            >DARK</button>
+          </div>
+        </div>
       </div>
     </header>
-    <main class="page-shell">
+
+    <main class="site-main">
       <slot />
     </main>
-    <footer class="site-footer">
-      <p>Astro static preview · content migration phase</p>
-    </footer>
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const setTheme = (theme, persist = true) => {
+          root.dataset.theme = theme;
+          if (persist) localStorage.setItem('ozone-layer-theme', theme);
+          document.querySelectorAll('[data-theme-option]').forEach((button) => {
+            button.setAttribute('aria-pressed', button.dataset.themeOption === theme ? 'true' : 'false');
+          });
+          if (themeMeta) themeMeta.setAttribute('content', theme === 'dark' ? '#171717' : '#F2EFE7');
+        };
+
+        const setLanguage = (language, persist = true) => {
+          root.dataset.language = language;
+          root.lang = language === 'en' ? 'en' : 'zh-CN';
+          if (persist) localStorage.setItem('ozone-layer-language', language);
+          document.querySelectorAll('[data-language-option]').forEach((button) => {
+            button.setAttribute('aria-pressed', button.dataset.languageOption === language ? 'true' : 'false');
+          });
+          document.querySelectorAll('[data-ui-zh][data-ui-en]').forEach((element) => {
+            element.textContent = language === 'en' ? element.dataset.uiEn : element.dataset.uiZh;
+          });
+        };
+
+        document.querySelectorAll('[data-theme-option]').forEach((button) => {
+          button.addEventListener('click', () => setTheme(button.dataset.themeOption));
+        });
+        document.querySelectorAll('[data-language-option]').forEach((button) => {
+          button.addEventListener('click', () => setLanguage(button.dataset.languageOption));
+        });
+
+        try {
+          const savedTheme = localStorage.getItem('ozone-layer-theme');
+          const savedLanguage = localStorage.getItem('ozone-layer-language');
+          setTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (themeMedia.matches ? 'dark' : 'light'), false);
+          setLanguage(savedLanguage === 'en' ? 'en' : 'zh', false);
+          themeMedia.addEventListener('change', (event) => {
+            if (!localStorage.getItem('ozone-layer-theme')) setTheme(event.matches ? 'dark' : 'light', false);
+          });
+        } catch {
+          setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light', false);
+          setLanguage(root.dataset.language === 'en' ? 'en' : 'zh', false);
+        }
+      })();
+    </script>
   </body>
 </html>
