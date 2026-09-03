@@ -1,37 +1,107 @@
 ---
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
+import LayerField from '../components/layers/LayerField.astro';
+import LayerLabel from '../components/layers/LayerLabel.astro';
+import LayerShell from '../components/layers/LayerShell.astro';
+import { projects } from '../data/projects';
 
-const writing = await getCollection('writing');
-const daily = await getCollection('daily');
-const dailyEntries = daily.reduce(
-  (total: number, entry: CollectionEntry<'daily'>) => total + entry.data.itemCount,
-  0,
+const writing = (await getCollection('writing')).sort(
+  (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+const latest = writing[0];
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
+const preview = (value?: string) => {
+  if (!value) return 'A new layer is waiting to be written.';
+  const compact = value.replace(/\s+/gu, ' ').trim();
+  return compact.length > 92 ? `${compact.slice(0, 92)}…` : compact;
+};
 ---
 
-<BaseLayout title="Migration Preview">
-  <SectionHeading
-    eyebrow="Ozone Layer 2.0"
-    title="Ozone Layer — Migration Preview"
-    description="A deliberately simple content check surface for the Hexo → Astro migration."
-  />
+<BaseLayout
+  title="Ozone Layer"
+  description="A public layer for things being made, noticed, remembered, and left unfinished."
+  activeSection="home"
+>
+  <LayerShell active="home" breadcrumb="HOME / HYBRID" mobileBreadcrumb="HOME / MOBILE">
+    <div class="home-intro">
+      <p>A public layer for things being made,<br class="desktop-only" /> noticed, remembered, and left unfinished.</p>
+    </div>
 
-  <section class="stat-grid" aria-label="Migration totals">
-    <div class="stat-card"><strong>{writing.length}</strong><span>Writing</span></div>
-    <div class="stat-card"><strong>{daily.length}</strong><span>Daily days</span></div>
-    <div class="stat-card"><strong>{dailyEntries}</strong><span>Daily entries</span></div>
-  </section>
+    <LayerField
+      section="about"
+      href="/about/"
+      draggable
+      rotation="8deg"
+      class="home-field home-field--about"
+      ariaLabel="Open About"
+    >
+      <div class="home-field__inner">
+        <LayerLabel label="ABOUT" />
+      </div>
+    </LayerField>
 
-  <section class="link-panel">
-    <h2>Content checks</h2>
-    <ul>
-      <li><a href="/writing/">View all Writing</a></li>
-      <li><a href="/daily/">View Daily</a></li>
-      <li><a href="/archive/">View the simple Archive</a></li>
-      <li><a href="/migration-check/">Open Migration Check</a></li>
-    </ul>
-  </section>
+    <LayerField
+      section="archive"
+      href="/archive/"
+      draggable
+      rotation="4deg"
+      class="home-field home-field--archive"
+      ariaLabel="Open Archive"
+    >
+      <div class="home-field__inner">
+        <LayerLabel label="ARCHIVE" />
+      </div>
+    </LayerField>
+
+    <LayerField
+      section="daily"
+      href="/daily/"
+      draggable
+      rotation="-2deg"
+      class="home-field home-field--daily"
+      ariaLabel="Open Daily"
+    >
+      <div class="home-field__inner">
+        <LayerLabel label="DAILY" />
+      </div>
+    </LayerField>
+
+    <LayerField
+      section="projects"
+      href="/projects/"
+      draggable
+      rotation="5deg"
+      class="home-field home-field--projects"
+      ariaLabel="Open Projects"
+    >
+      <div class="home-field__inner">
+        <LayerLabel label="PROJECTS" />
+        <div class="field-fixture">
+          <p class="field-kicker">LATEST PROJECT / DRAFT FIXTURE</p>
+          <p class="field-title">{projects[0].title}</p>
+          <p class="field-summary">Capability documentation that grows with each real robot validation.</p>
+        </div>
+        <p class="field-meta">{projects[0].title} / visual fixture / open</p>
+      </div>
+    </LayerField>
+
+    <LayerField
+      section="writing"
+      href={latest ? `/writing/${latest.data.slug}/` : '/writing/'}
+      draggable
+      rotation="-2deg"
+      class="home-field home-field--writing"
+      ariaLabel={latest ? `Open latest Writing: ${latest.data.title}` : 'Open Writing'}
+    >
+      <div class="home-field__inner">
+        <p class="field-kicker">RECENT WRITING</p>
+        <p class="field-title">{latest?.data.title ?? 'No writing yet.'}</p>
+        <p class="field-summary">{preview(latest?.data.description)}</p>
+        <p class="field-meta">{latest ? formatDate(latest.data.date) : '—'} &nbsp;→&nbsp; OPEN</p>
+      </div>
+    </LayerField>
+
+    <p class="home-instructions">HOVER&nbsp; +18 PX &nbsp;&nbsp;&nbsp; DRAG&nbsp; ±60 PX &nbsp;&nbsp;&nbsp; CLICK&nbsp; → EXPAND / PUSH &nbsp;&nbsp;&nbsp; ESC&nbsp; → HOME</p>
+  </LayerShell>
 </BaseLayout>

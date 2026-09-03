@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
+import { projects } from '../../data/projects';
+---
+
+<BaseLayout
+  title="Projects"
+  description="An editorial index of projects and project notes."
+  activeSection="projects"
+>
+  <LayerShell active="projects" breadcrumb="PROJECTS / INDEX" mobileBreadcrumb="PROJECTS">
+    <div class="sheet-content sheet-content--projects">
+      <header class="section-sheet-header">
+        <div>
+          <h1>PROJECTS</h1>
+          <p class="section-sheet-header__summary">Things built, tested, broken, rebuilt, and eventually documented.</p>
+          <p class="fixture-note">The current list is a draft visual fixture. Real project data is not asserted here.</p>
+        </div>
+        <p class="sheet-status">06 → 10 PROJECTS / GROWS SLOWLY</p>
+      </header>
+
+      <div class="project-index" aria-label="Project index">
+        {projects.map((project, index) => (
+          <a
+            class="project-entry"
+            href={`/projects/${project.slug}/`}
+            aria-label={`Open ${project.title}${project.fixture ? ' draft fixture' : ''}`}
+          >
+            <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
+            <span class="project-name">{project.title}</span>
+            <span class="project-description">{project.shortDescription}</span>
+            <span class="project-year">{project.year}</span>
+            <span class="project-arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+
+      <p class="sheet-footer-note">HOVER: LOW SHIFTS 8 PX. &nbsp; CLICK: BLUE PLANE EXPANDS; OTHER COLORS REMAIN AS EDGE LAYERS.</p>
+    </div>
+  </LayerShell>
+</BaseLayout>

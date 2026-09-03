@@ -1,30 +1,99 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
 
-const writing = (await getCollection('writing')).sort(
-  (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-const daily = (await getCollection('daily')).sort(
-  (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+type WritingEntry = CollectionEntry<'writing'>;
+type DailyEntry = CollectionEntry<'daily'>;
+type ArchiveItem = {
+  kind: 'writing' | 'daily';
+  key: string;
+  title: string;
+  date: Date;
+  dateLabel: string;
+  href: string;
+  year: number;
+};
+
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
 const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)} → ${formatDate(end)}` : formatDate(start);
+const writing = await getCollection('writing');
+const daily = await getCollection('daily');
+const archiveItems: ArchiveItem[] = [
+  ...writing.map((entry: WritingEntry) => ({
+    kind: 'writing' as const,
+    key: `writing:${entry.data.slug}`,
+    title: entry.data.title,
+    date: entry.data.date,
+    dateLabel: formatDate(entry.data.date),
+    href: `/writing/${entry.data.slug}/`,
+    year: entry.data.date.getUTCFullYear(),
+  })),
+  ...daily.map((entry: DailyEntry) => ({
+    kind: 'daily' as const,
+    key: `daily:${entry.id}`,
+    title: entry.data.legacyDateLabel ?? 'Daily note',
+    date: entry.data.date,
+    dateLabel: formatDateRange(entry.data.date, entry.data.endDate),
+    href: `/daily/#daily-${entry.id}`,
+    year: entry.data.date.getUTCFullYear(),
+  })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf() || a.key.localeCompare(b.key));
+
+const hash = (value: string) => Array.from(value).reduce((total, character, index) => (total + character.charCodeAt(0) * (index + 11)) % 997, 0);
+const columns = [3, 27, 51, 74];
+const rotations = [-3, -2, 0.5, 2, 3];
+const layoutFor = (item: ArchiveItem, index: number) => {
+  const value = hash(item.key);
+  const row = Math.floor(index / columns.length);
+  return {
+    left: `${columns[index % columns.length] + (value % 5) / 2}%`,
+    top: `${20 + row * 125 + (value % 17) - 8}px`,
+    width: `${20 + (value % 8)}%`,
+    rotation: `${rotations[value % rotations.length]}deg`,
+    variant: item.kind === 'writing' ? 'writing' : value % 3 === 0 ? 'paper' : 'daily',
+  };
+};
+const years = [...new Set(archiveItems.map((item) => item.year))].sort((a, b) => b - a);
 ---
 
-<BaseLayout title="Archive">
-  <SectionHeading title="Archive" description="A plain data index for this migration phase." />
-  <section class="archive-section">
-    <h2>Writing</h2>
-    <ul class="archive-list">
-      {writing.map((post: CollectionEntry<'writing'>) => <li><span>{formatDate(post.data.date)}</span><a href={`/writing/${post.data.slug}/`}>{post.data.title}</a></li>)}
-    </ul>
-  </section>
-  <section class="archive-section">
-    <h2>Daily</h2>
-    <ul class="archive-list">
-      {daily.map((entry: CollectionEntry<'daily'>) => <li><span>{formatDateRange(entry.data.date, entry.data.endDate)}</span><a href="/daily/">{entry.data.legacyDateLabel ?? formatDateRange(entry.data.date, entry.data.endDate)}</a></li>)}
-    </ul>
-  </section>
+<BaseLayout
+  title="Archive"
+  description="A deterministic collage of Writing and Daily fragments, ordered by time without becoming a folder tree."
+  activeSection="archive"
+>
+  <LayerShell active="archive" breadcrumb="ARCHIVE / COLLAGE" mobileBreadcrumb="ARCHIVE">
+    <div class="sheet-content sheet-content--archive">
+      <header class="section-sheet-header">
+        <div>
+          <h1>ARCHIVE</h1>
+          <p class="section-sheet-header__summary">Writing, old daily notes, photographs, travel fragments. Time exists, but does not govern the grid.</p>
+        </div>
+        <p class="sheet-status">{archiveItems.length} FRAGMENTS / {years.length} YEARS</p>
+      </header>
+
+      <div class="archive-board" aria-label="Archive fragments">
+        {archiveItems.map((item, index) => {
+          const layout = layoutFor(item, index);
+          return (
+            <a
+              class:list={['archive-fragment', `archive-fragment--${layout.variant}`]}
+              href={item.href}
+              id={archiveItems.findIndex((candidate) => candidate.year === item.year) === index ? `archive-${item.year}` : undefined}
+              style={`--fragment-left: ${layout.left}; --fragment-top: ${layout.top}; --fragment-width: ${layout.width}; --fragment-rotation: ${layout.rotation};`}
+              data-archive-key={item.key}
+            >
+              <span class="archive-fragment__meta">{item.kind} / {item.dateLabel}</span>
+              <span class="archive-fragment__title">{item.title}</span>
+            </a>
+          );
+        })}
+
+        <nav class="archive-years" aria-label="Archive years">
+          {years.map((year) => <a class="archive-year" href={`#archive-${year}`}>{year}</a>)}
+          <p class="archive-year-note">Year markers are anchors, not folders.</p>
+        </nav>
+      </div>
+    </div>
+  </LayerShell>
 </BaseLayout>

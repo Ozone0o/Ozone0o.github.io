@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="A personal, informal, privacy-conscious description of Ozone Layer."
+  activeSection="about"
+>
+  <LayerShell active="about" breadcrumb="ABOUT" mobileBreadcrumb="ABOUT">
+    <div class="sheet-content sheet-content--about">
+      <div class="about-layout">
+        <section class="about-lead">
+          <h1>ABOUT</h1>
+          <p class="about-lead__intro">ozone layer is maintained by ozoneo0.</p>
+          <p>This is a place for small software, robot experiments, unfinished notes, travel writing, and things that seemed worth keeping.</p>
+          <p>It is public, but not intimate. There is no real name, school, location history, or résumé here. The boundary is deliberate.</p>
+        </section>
+
+        <aside class="about-note">
+          <span class="field-kicker">NOW / 09.2026</span>
+          <p>building robot tooling<br />redesigning this site<br />writing less than intended</p>
+        </aside>
+      </div>
+
+      <section class="about-likes">
+        <p class="field-kicker">LIKES</p>
+        <p>flat graphics / odd websites / trains / hardware / maps / things with visible seams</p>
+      </section>
+
+      <nav class="about-links" aria-label="About links">
+        <a href="https://github.com/Ozone0o/Ozone0o.github.io" rel="me">GITHUB&nbsp; ↗</a>
+        <span>EMAIL&nbsp; / TODO</span>
+        <span>RSS&nbsp; / TODO</span>
+      </nav>
+    </div>
+  </LayerShell>
+</BaseLayout>

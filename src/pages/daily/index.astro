@@ -1,32 +1,60 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
 
 const daily = (await getCollection('daily')).sort(
   (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+const visibleDaily = daily.slice(0, 8);
 const rendered = await Promise.all(
-  daily.map(async (entry: CollectionEntry<'daily'>) => ({ entry, Content: (await render(entry)).Content })),
+  visibleDaily.map(async (entry: CollectionEntry<'daily'>) => ({ entry, Content: (await render(entry)).Content })),
 );
-const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+const today = new Date();
+const cutoff = new Date(today);
+cutoff.setDate(cutoff.getDate() - 30);
+const hasRecent = daily.some((entry) => entry.data.date >= cutoff && entry.data.date <= today);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
 const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)} → ${formatDate(end)}` : formatDate(start);
 ---
 
-<BaseLayout title="Daily">
-  <SectionHeading title="Daily" description={`${daily.length} migrated date groups.`} />
-  <div class="daily-list">
-    {rendered.map(({ entry, Content }) => (
-      <section class="daily-entry">
-        <header>
-          <p class="entry-meta">{formatDateRange(entry.data.date, entry.data.endDate)} · {entry.data.itemCount} items</p>
-          <h2>{entry.data.legacyDateLabel ?? formatDateRange(entry.data.date, entry.data.endDate)}</h2>
-          {entry.data.dateResolution === 'range' && (
-            <p class="entry-note">Explicit legacy date range preserved; items remain in source order.</p>
+<BaseLayout
+  title="Daily"
+  description="Short notes kept as date groups, with explicit legacy ranges preserved."
+  activeSection="daily"
+>
+  <LayerShell active="daily" breadcrumb="DAILY / LAST 30 DAYS" mobileBreadcrumb="DAILY">
+    <div class="sheet-content sheet-content--daily">
+      <header class="section-sheet-header">
+        <div>
+          <h1>DAILY</h1>
+          <p class="section-sheet-header__summary">One or two sentences. Nothing needs to become an essay.</p>
+          {!hasRecent && (
+            <p
+              class="daily-fallback"
+              data-ui-zh="最近 30 天没有新的 Daily；这里显示最近可用的记录。"
+              data-ui-en="No new Daily in the last 30 days; showing the latest available entries."
+            >最近 30 天没有新的 Daily；这里显示最近可用的记录。</p>
           )}
-        </header>
-        <div class="prose"><Content /></div>
-      </section>
-    ))}
-  </div>
+        </div>
+        <p class="sheet-status">{daily.length} DATE GROUPS / {daily.reduce((total, entry) => total + entry.data.itemCount, 0)} ITEMS</p>
+      </header>
+
+      <div class="daily-index" aria-label="Latest Daily entries">
+        {rendered.map(({ entry, Content }) => (
+          <article class="daily-row" id={`daily-${entry.id}`}>
+            <time class="daily-row__date" datetime={entry.data.date.toISOString()}>
+              {formatDateRange(entry.data.date, entry.data.endDate)}
+            </time>
+            <div class="daily-row__content">
+              {entry.data.legacyDateLabel && <p class="daily-row__label">{entry.data.legacyDateLabel}</p>}
+              <div class="daily-row__body prose"><Content /></div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <a class="daily-archive-link" href="/archive/">OLDER THAN 30 DAYS&nbsp; →&nbsp; ARCHIVE</a>
+    </div>
+  </LayerShell>
 </BaseLayout>

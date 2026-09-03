@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
+import { projects, type ProjectRecord } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: ProjectRecord;
+}
+
+const { project } = Astro.props as Props;
+const timeline = project.timeline.length > 0
+  ? project.timeline
+  : [{ date: 'TBD', title: 'Project notes pending', description: 'A real project timeline will be added in a later content pass.' }];
+---
+
+<BaseLayout
+  title={project.title}
+  description={`${project.title} — project detail layer.`}
+  activeSection="projects"
+>
+  <LayerShell active="projects" class="layer-shell--project-detail" breadcrumb={`PROJECTS / ${project.title.toUpperCase()}`} mobileBreadcrumb="PROJECTS">
+    <div class="sheet-content sheet-content--project-detail">
+      <header class="project-detail__header">
+        <div>
+          <h1>{project.title.toUpperCase()}</h1>
+          <p class="project-detail__summary">{project.summary}</p>
+        </div>
+        <p class="project-detail__fixture">DRAFT / VISUAL FIXTURE<br />NOT A FACTUAL PROJECT RECORD</p>
+      </header>
+
+      <div class="project-detail__meta" aria-label="Project metadata">
+        <span>STATUS / {project.status}</span>
+        <span>TYPE / PROJECT LAYER</span>
+        <span>RANGE / {project.year}</span>
+      </div>
+
+      <section class="project-timeline" aria-labelledby="timeline-heading">
+        <h2 id="timeline-heading" class="sr-only">Project timeline</h2>
+        {timeline.map((item) => (
+          <article class="timeline-item">
+            <time class="timeline-item__date">{item.date}</time>
+            <span class="timeline-item__node" aria-hidden="true"></span>
+            <div class="timeline-item__body">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section class="project-evidence" aria-label="Project evidence">
+        <figure class="project-note project-note--top">
+          <figcaption>CURRENT RESULT / TODO</figcaption>
+          <p>Images, diagrams, links, and notes will live here when real project data is ready.</p>
+        </figure>
+        <figure class="project-note project-note--bottom">
+          <figcaption>EVIDENCE / TODO</figcaption>
+          <p>[ screenshots ]<br />[ diagrams ]<br />[ external links ]</p>
+        </figure>
+      </section>
+
+      <nav class="project-detail__links" aria-label="Project links">
+        <a href="/projects/">← PROJECTS</a>
+        <span>GITHUB / TODO</span>
+        <span>NOTES / TODO</span>
+      </nav>
+    </div>
+  </LayerShell>
+</BaseLayout>
