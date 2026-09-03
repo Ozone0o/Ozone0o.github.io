@@ -1,0 +1,26 @@
+{
+  "name": "ozone-layer-2",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "migrate": "node scripts/migrate-legacy.mjs",
+    "verify:migration": "node scripts/verify-migration.mjs"
+  },
+  "dependencies": {
+    "astro": "7.2.10",
+    "cheerio": "1.2.0",
+    "marked": "18.0.11",
+    "turndown": "7.2.4",
+    "turndown-plugin-gfm": "1.0.2",
+    "yaml": "2.9.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "6.0.3"
+  }
+}

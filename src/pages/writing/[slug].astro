@@ -1,0 +1,31 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing');
+  return posts.map((entry: CollectionEntry<'writing'>) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'writing'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await render(entry);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="prose entry-detail">
+    <header class="entry-detail__header">
+      <p class="entry-meta">{formatDate(entry.data.date)}{entry.data.updated && ` · updated ${formatDate(entry.data.updated)}`}</p>
+      <h1>{entry.data.title}</h1>
+      <p class="legacy-note">Legacy URL: <code>{entry.data.legacyPath}</code></p>
+    </header>
+    <Content />
+  </article>
+</BaseLayout>

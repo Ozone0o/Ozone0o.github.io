@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Ozone Layer — a personal archive and writing space.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} · Ozone Layer 2.0</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-title" href="/">Ozone Layer 2.0</a>
+        <nav aria-label="Primary navigation">
+          <a href="/writing/">Writing</a>
+          <a href="/daily/">Daily</a>
+          <a href="/archive/">Archive</a>
+          <a href="/migration-check/">Migration Check</a>
+        </nav>
+      </div>
+    </header>
+    <main class="page-shell">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>Astro static preview · content migration phase</p>
+    </footer>
+  </body>
+</html>

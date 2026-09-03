@@ -1,0 +1,16 @@
+{
+  "status": "NOT_RUN",
+  "generatedAt": null,
+  "legacy": {
+    "site": "https://ozoneo0.cn",
+    "totalPostCount": 0,
+    "totalDailyItemCount": 0,
+    "totalDailyDateCount": 0
+  },
+  "writing": { "entries": [] },
+  "daily": { "entries": [] },
+  "media": { "copiedLocalFiles": [], "missingLocalFiles": [], "remoteMediaUrls": [] },
+  "warnings": ["Migration has not been run yet."],
+  "errors": [],
+  "validation": { "status": "NOT_RUN" }
+}

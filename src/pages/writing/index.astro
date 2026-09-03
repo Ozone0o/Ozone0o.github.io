@@ -1,0 +1,24 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const posts = (await getCollection('writing')).sort(
+  (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Writing">
+  <SectionHeading title="Writing" description={`${posts.length} migrated legacy posts.`} />
+  <div class="entry-list">
+    {posts.map((post: CollectionEntry<'writing'>) => (
+      <article class="entry-card">
+        <p class="entry-meta">{formatDate(post.data.date)}</p>
+        <h2><a href={`/writing/${post.data.slug}/`}>{post.data.title}</a></h2>
+        {post.data.description && <p>{post.data.description}</p>}
+        <a class="text-link" href={`/writing/${post.data.slug}/`}>Read entry →</a>
+      </article>
+    ))}
+  </div>
+</BaseLayout>

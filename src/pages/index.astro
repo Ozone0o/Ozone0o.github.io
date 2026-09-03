@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+
+const writing = await getCollection('writing');
+const daily = await getCollection('daily');
+const dailyEntries = daily.reduce(
+  (total: number, entry: CollectionEntry<'daily'>) => total + entry.data.itemCount,
+  0,
+);
+---
+
+<BaseLayout title="Migration Preview">
+  <SectionHeading
+    eyebrow="Ozone Layer 2.0"
+    title="Ozone Layer — Migration Preview"
+    description="A deliberately simple content check surface for the Hexo → Astro migration."
+  />
+
+  <section class="stat-grid" aria-label="Migration totals">
+    <div class="stat-card"><strong>{writing.length}</strong><span>Writing</span></div>
+    <div class="stat-card"><strong>{daily.length}</strong><span>Daily days</span></div>
+    <div class="stat-card"><strong>{dailyEntries}</strong><span>Daily entries</span></div>
+  </section>
+
+  <section class="link-panel">
+    <h2>Content checks</h2>
+    <ul>
+      <li><a href="/writing/">View all Writing</a></li>
+      <li><a href="/daily/">View Daily</a></li>
+      <li><a href="/archive/">View the simple Archive</a></li>
+      <li><a href="/migration-check/">Open Migration Check</a></li>
+    </ul>
+  </section>
+</BaseLayout>

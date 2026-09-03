@@ -1,0 +1,29 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const writing = (await getCollection('writing')).sort(
+  (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const daily = (await getCollection('daily')).sort(
+  (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Archive">
+  <SectionHeading title="Archive" description="A plain data index for this migration phase." />
+  <section class="archive-section">
+    <h2>Writing</h2>
+    <ul class="archive-list">
+      {writing.map((post: CollectionEntry<'writing'>) => <li><span>{formatDate(post.data.date)}</span><a href={`/writing/${post.data.slug}/`}>{post.data.title}</a></li>)}
+    </ul>
+  </section>
+  <section class="archive-section">
+    <h2>Daily</h2>
+    <ul class="archive-list">
+      {daily.map((entry: CollectionEntry<'daily'>) => <li><span>{formatDate(entry.data.date)}</span><a href="/daily/">{entry.data.legacyDateLabel ?? formatDate(entry.data.date)}</a></li>)}
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const daily = (await getCollection('daily')).sort(
+  (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const rendered = await Promise.all(
+  daily.map(async (entry: CollectionEntry<'daily'>) => ({ entry, Content: (await render(entry)).Content })),
+);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Daily">
+  <SectionHeading title="Daily" description={`${daily.length} migrated date groups.`} />
+  <div class="daily-list">
+    {rendered.map(({ entry, Content }) => (
+      <section class:list={["daily-entry", entry.data.dateResolution === 'ambiguous' && 'daily-entry--review']}>
+        <header>
+          <p class="entry-meta">{formatDate(entry.data.date)} · {entry.data.itemCount} items</p>
+          <h2>{entry.data.legacyDateLabel ?? formatDate(entry.data.date)}</h2>
+          {entry.data.dateResolution === 'ambiguous' && (
+            <p class="warning">The legacy heading covered multiple dates; items remain in source order for review.</p>
+          )}
+        </header>
+        <div class="prose"><Content /></div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
