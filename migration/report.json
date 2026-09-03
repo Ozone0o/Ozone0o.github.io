@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-03T03:43:51.115Z",
-  "status": "NEEDS_REVIEW",
+  "generatedAt": "2026-09-03T03:56:15.153Z",
+  "status": "PASS",
   "legacy": {
     "site": "https://ozoneo0.cn",
     "snapshotBranch": "legacy-hexo",
@@ -9,7 +9,7 @@
     "totalDailyItemCount": 66,
     "totalDailyDateCount": 27,
     "exactDailyDateCount": 25,
-    "ambiguousDailyDateCount": 2,
+    "rangeDailyDateCount": 2,
     "referencedLocalImageCount": 0,
     "referencedRemoteImageCount": 4
   },
@@ -52,7 +52,9 @@
         "date": "2024-01-13",
         "destination": "/writing/by/",
         "legacyPath": "/2024/01/13/pic/",
-        "warnings": [],
+        "warnings": [
+          "1 remote image element(s) retained by URL."
+        ],
         "updated": "2024-01-13",
         "textValidationResult": "PASS",
         "checks": {
@@ -81,7 +83,10 @@
         "date": "2024-01-14",
         "destination": "/writing/2023年度总结/",
         "legacyPath": "/2024/01/14/2023%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/",
-        "warnings": [],
+        "warnings": [
+          "Turndown text mismatch; retained cleaned legacy HTML as a raw HTML fallback.",
+          "1 remote image element(s) retained by URL."
+        ],
         "updated": "2024-01-24",
         "textValidationResult": "PASS",
         "checks": {
@@ -139,7 +144,9 @@
         "date": "2024-02-03",
         "destination": "/writing/100人次纪念/",
         "legacyPath": "/2024/02/03/100%E4%BA%BA%E6%AC%A1%E7%BA%AA%E5%BF%B5%EF%BC%88%EF%BC%81%EF%BC%89/",
-        "warnings": [],
+        "warnings": [
+          "1 remote image element(s) retained by URL."
+        ],
         "updated": "2024-02-03",
         "textValidationResult": "PASS",
         "checks": {
@@ -168,7 +175,9 @@
         "date": "2024-02-04",
         "destination": "/writing/盒与被盒的关系/",
         "legacyPath": "/2024/02/04/%E7%9B%92%E4%B8%8E%E8%A2%AB%E7%9B%92%E7%9A%84%E5%85%B3%E7%B3%BB/",
-        "warnings": [],
+        "warnings": [
+          "Turndown text mismatch; retained cleaned legacy HTML as a raw HTML fallback."
+        ],
         "updated": "2024-02-04",
         "textValidationResult": "PASS",
         "checks": {
@@ -226,7 +235,9 @@
         "date": "2024-03-12",
         "destination": "/writing/我的-小破站有新版面了/",
         "legacyPath": "/2024/03/12/%EF%BC%88%E6%88%91%E7%9A%84%EF%BC%89%E5%B0%8F%E7%A0%B4%E7%AB%99%E6%9C%89%E6%96%B0%E7%89%88%E9%9D%A2%E4%BA%86%EF%BC%81%EF%BC%9F/",
-        "warnings": [],
+        "warnings": [
+          "1 remote image element(s) retained by URL."
+        ],
         "updated": "2024-03-12",
         "textValidationResult": "PASS",
         "checks": {
@@ -431,11 +442,12 @@
     "migratedItems": 66,
     "migratedDateGroups": 27,
     "exactDateGroups": 25,
-    "ambiguousDateGroups": 2,
+    "rangeDateGroups": 2,
     "unresolvedItems": [],
     "entries": [
       {
         "date": "2024-01-13",
+        "endDate": null,
         "legacyDateLabel": "2024-01-13",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -450,6 +462,7 @@
       },
       {
         "date": "2024-01-14",
+        "endDate": null,
         "legacyDateLabel": "2024-01-14",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -464,6 +477,7 @@
       },
       {
         "date": "2024-01-15",
+        "endDate": null,
         "legacyDateLabel": "2024-01-15",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -478,8 +492,9 @@
       },
       {
         "date": "2024-01-16",
-        "legacyDateLabel": "16 && 17 (天津特别篇)",
-        "dateResolution": "ambiguous",
+        "endDate": "2024-01-17",
+        "legacyDateLabel": "天津特别篇",
+        "dateResolution": "range",
         "dateCandidates": [
           "2024-01-16",
           "2024-01-17"
@@ -487,14 +502,15 @@
         "itemCount": 4,
         "sourceOrderStart": 50,
         "sourceOrderEnd": 53,
-        "destination": "src/content/daily/2024-01-16--ambiguous-16-17-16-and-and-17-天津特别篇.md",
-        "validationResult": "REVIEW: ambiguous date heading",
+        "destination": "src/content/daily/2024-01-16--2024-01-17-天津特别篇.md",
+        "validationResult": "PASS",
         "mismatch": []
       },
       {
         "date": "2024-01-18",
-        "legacyDateLabel": "18 && 19 && 20（济州岛特别篇）",
-        "dateResolution": "ambiguous",
+        "endDate": "2024-01-20",
+        "legacyDateLabel": "济州岛特别篇",
+        "dateResolution": "range",
         "dateCandidates": [
           "2024-01-18",
           "2024-01-19",
@@ -503,12 +519,13 @@
         "itemCount": 3,
         "sourceOrderStart": 47,
         "sourceOrderEnd": 49,
-        "destination": "src/content/daily/2024-01-18--ambiguous-18-19-20-18-and-and-19-and-and-20-济州岛特别篇.md",
-        "validationResult": "REVIEW: ambiguous date heading",
+        "destination": "src/content/daily/2024-01-18--2024-01-20-济州岛特别篇.md",
+        "validationResult": "PASS",
         "mismatch": []
       },
       {
         "date": "2024-01-21",
+        "endDate": null,
         "legacyDateLabel": "2024-01-21",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -523,6 +540,7 @@
       },
       {
         "date": "2024-03-11",
+        "endDate": null,
         "legacyDateLabel": "2024-03-11",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -537,6 +555,7 @@
       },
       {
         "date": "2024-03-22",
+        "endDate": null,
         "legacyDateLabel": "2024-03-22",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -551,6 +570,7 @@
       },
       {
         "date": "2024-03-25",
+        "endDate": null,
         "legacyDateLabel": "2024-03-25",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -565,6 +585,7 @@
       },
       {
         "date": "2024-04-02",
+        "endDate": null,
         "legacyDateLabel": "2024-04-02",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -579,6 +600,7 @@
       },
       {
         "date": "2024-04-16",
+        "endDate": null,
         "legacyDateLabel": "2024-04-16",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -593,6 +615,7 @@
       },
       {
         "date": "2024-04-22",
+        "endDate": null,
         "legacyDateLabel": "2024-04-22",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -607,6 +630,7 @@
       },
       {
         "date": "2024-04-23",
+        "endDate": null,
         "legacyDateLabel": "2024-04-23",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -621,6 +645,7 @@
       },
       {
         "date": "2024-04-26",
+        "endDate": null,
         "legacyDateLabel": "2024-04-26",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -635,6 +660,7 @@
       },
       {
         "date": "2024-04-28",
+        "endDate": null,
         "legacyDateLabel": "2024-04-28",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -649,6 +675,7 @@
       },
       {
         "date": "2024-05-05",
+        "endDate": null,
         "legacyDateLabel": "2024-05-05",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -663,6 +690,7 @@
       },
       {
         "date": "2024-05-06",
+        "endDate": null,
         "legacyDateLabel": "2024-05-06",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -677,6 +705,7 @@
       },
       {
         "date": "2024-05-27",
+        "endDate": null,
         "legacyDateLabel": "2024-05-27",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -691,6 +720,7 @@
       },
       {
         "date": "2024-06-03",
+        "endDate": null,
         "legacyDateLabel": "2024-06-03",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -705,6 +735,7 @@
       },
       {
         "date": "2024-08-27",
+        "endDate": null,
         "legacyDateLabel": "2024-08-27",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -719,6 +750,7 @@
       },
       {
         "date": "2024-09-07",
+        "endDate": null,
         "legacyDateLabel": "2024-09-07",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -733,6 +765,7 @@
       },
       {
         "date": "2024-09-29",
+        "endDate": null,
         "legacyDateLabel": "2024-09-29",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -747,6 +780,7 @@
       },
       {
         "date": "2024-09-30",
+        "endDate": null,
         "legacyDateLabel": "2024-09-30",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -761,6 +795,7 @@
       },
       {
         "date": "2024-10-13",
+        "endDate": null,
         "legacyDateLabel": "2024-10-13",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -775,6 +810,7 @@
       },
       {
         "date": "2024-10-22",
+        "endDate": null,
         "legacyDateLabel": "2024-10-22",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -789,6 +825,7 @@
       },
       {
         "date": "2024-10-25",
+        "endDate": null,
         "legacyDateLabel": "2024-10-25",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -803,6 +840,7 @@
       },
       {
         "date": "2024-11-05",
+        "endDate": null,
         "legacyDateLabel": "2024-11-05",
         "dateResolution": "exact",
         "dateCandidates": [
@@ -935,12 +973,10 @@
       "reason": "not a post page (page configuration isPost is false or absent)"
     }
   ],
-  "warnings": [
-    "2 Daily date group(s) require human date assignment review."
-  ],
+  "warnings": [],
   "errors": [],
   "validation": {
-    "status": "NEEDS_REVIEW",
+    "status": "PASS",
     "writingTotal": 14,
     "writingMigrated": 14,
     "writingPassed": 14,
@@ -948,7 +984,7 @@
     "dailyTotal": 66,
     "dailyMigrated": 66,
     "dailyTextOrder": "PASS",
-    "dailyDateResolution": "REVIEW",
+    "dailyDateResolution": "PASS",
     "missingMedia": 0
   }
 }

@@ -29,6 +29,7 @@ const statusClass = status === 'PASS' ? 'status--pass' : 'status--review';
   <section class="check-section">
     <h2>Daily validation</h2>
     <p>Legacy items: {report.daily?.legacyItems ?? 0} · Migrated items: {report.daily?.migratedItems ?? 0} · Date groups: {report.daily?.migratedDateGroups ?? 0}</p>
+    <p>Exact dates: {report.daily?.exactDateGroups ?? 0} · Date ranges: {report.daily?.rangeDateGroups ?? 0}</p>
     <p>Text/order: {validation.dailyTextOrder ?? 'not run'} · Date resolution: {validation.dailyDateResolution ?? 'not run'}</p>
   </section>
   {report.warnings?.length > 0 && (

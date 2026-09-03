@@ -24,16 +24,29 @@ const writing = defineCollection({
 
 const daily = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/daily' }),
-  schema: z.object({
-    date: z.coerce.date(),
-    itemCount: z.number().int().nonnegative(),
-    sourceOrderStart: z.number().int().positive(),
-    sourceOrderEnd: z.number().int().positive(),
-    dateResolution: z.enum(['exact', 'ambiguous']).default('exact'),
-    legacyDateLabel: z.coerce.string().optional(),
-    dateCandidates: z.array(z.coerce.string()).optional(),
-    ...sharedLegacySchema,
-  }),
+  schema: z
+    .object({
+      date: z.coerce.date(),
+      endDate: z.coerce.date().optional(),
+      itemCount: z.number().int().nonnegative(),
+      sourceOrderStart: z.number().int().positive(),
+      sourceOrderEnd: z.number().int().positive(),
+      dateResolution: z.enum(['exact', 'range']).default('exact'),
+      legacyDateLabel: z.coerce.string().optional(),
+      dateCandidates: z.array(z.coerce.string()).optional(),
+      ...sharedLegacySchema,
+    })
+    .superRefine((data, context) => {
+      if (data.dateResolution === 'range' && !data.endDate) {
+        context.addIssue({ code: 'custom', path: ['endDate'], message: 'A date range requires endDate.' });
+      }
+      if (data.dateResolution === 'exact' && data.endDate) {
+        context.addIssue({ code: 'custom', path: ['endDate'], message: 'An exact date must not define endDate.' });
+      }
+      if (data.endDate && data.endDate <= data.date) {
+        context.addIssue({ code: 'custom', path: ['endDate'], message: 'endDate must be after date.' });
+      }
+    }),
 });
 
 export const collections = { writing, daily };

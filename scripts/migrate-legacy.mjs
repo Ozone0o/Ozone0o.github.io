@@ -41,6 +41,7 @@ function resetGeneratedOutput() {
   clearGeneratedMarkdown(DAILY_ROOT);
   fs.rmSync(MEDIA_ROOT, { recursive: true, force: true });
   ensureDirectory(MEDIA_ROOT);
+  fs.writeFileSync(path.join(MEDIA_ROOT, '.gitkeep'), '', 'utf8');
 }
 
 function markdownListItem(markdown) {
@@ -187,8 +188,7 @@ function makeWritingEntry(post, slug, media, errors) {
 
 function makeDailyFileName(group) {
   if (group.dateResolution === 'exact') return `${group.date}.md`;
-  const candidatePart = group.dateCandidates.map((date) => date.slice(-2)).join('-');
-  return `${group.date}--ambiguous-${candidatePart}-${fileSlugFromTitle(group.legacyDateLabel)}.md`;
+  return `${group.date}--${group.endDate}-${fileSlugFromTitle(group.legacyDateLabel)}.md`;
 }
 
 function migrateDaily(daily, warnings, errors) {
@@ -210,19 +210,19 @@ function migrateDaily(daily, warnings, errors) {
       sourceOrderStart: group.sourceOrderStart,
       sourceOrderEnd: group.sourceOrderEnd,
       dateResolution: group.dateResolution,
-      ...(group.dateResolution === 'ambiguous' ? { legacyDateLabel: group.legacyDateLabel } : {}),
-      ...(group.dateResolution === 'ambiguous' ? { dateCandidates: group.dateCandidates } : {}),
+      ...(group.dateResolution === 'range' ? { endDate: group.endDate } : {}),
+      ...(group.dateResolution === 'range' ? { legacyDateLabel: group.legacyDateLabel } : {}),
+      ...(group.dateResolution === 'range' ? { dateCandidates: group.dateCandidates } : {}),
       lang: 'zh',
       legacy: true,
       legacyPath: '/schedule/',
       sourceFile: daily.sourceFile,
     };
     writeMarkdownFile(path.join(DAILY_ROOT, fileName), frontmatter, body);
-    const validationResult = group.dateResolution === 'exact'
-      ? 'PASS'
-      : 'REVIEW: ambiguous date heading';
+    const validationResult = ['exact', 'range'].includes(group.dateResolution) ? 'PASS' : 'FAIL';
     entries.push({
       date: group.date,
+      endDate: group.endDate || null,
       legacyDateLabel: group.legacyDateLabel,
       dateResolution: group.dateResolution,
       dateCandidates: group.dateCandidates,
@@ -234,11 +234,6 @@ function migrateDaily(daily, warnings, errors) {
       warnings: group.warnings,
     });
     warnings.push(...group.warnings);
-    if (group.dateResolution === 'ambiguous') {
-      warnings.push(
-        `Daily heading "${group.legacyDateLabel}" explicitly covers multiple dates; item-to-date assignment was not guessed.`,
-      );
-    }
   }
   if (daily.unresolvedItems.length > 0) {
     errors.push(`${daily.unresolvedItems.length} Daily item(s) had no reliable date context.`);
@@ -257,15 +252,13 @@ function buildReport(scan, daily, writingEntries, dailyEntries, media, errors) {
     scan.errors.length > 0 ||
     errors.length > 0 ||
     media.missingByKey.size > 0 ||
-    daily.unresolvedItems.length > 0 ||
-    daily.ambiguousDateCount > 0;
+    daily.unresolvedItems.length > 0;
   const warnings = [...new Set([
     ...daily.warnings,
     ...dailyEntries.flatMap((entry) => entry.warnings || []),
     ...media.unsupportedUrls.size > 0
       ? [`${media.unsupportedUrls.size} inline/blob media URL(s) were retained without copying.`]
       : [],
-    ...(daily.ambiguousDateCount > 0 ? [`${daily.ambiguousDateCount} Daily date group(s) require human date assignment review.`] : []),
   ])];
   const allErrors = [...new Set([...scan.errors, ...errors, ...media.errors])];
   const report = {
@@ -279,7 +272,7 @@ function buildReport(scan, daily, writingEntries, dailyEntries, media, errors) {
       totalDailyItemCount: daily.legacyItems,
       totalDailyDateCount: daily.groups.length,
       exactDailyDateCount: daily.exactDateCount,
-      ambiguousDailyDateCount: daily.ambiguousDateCount,
+      rangeDailyDateCount: daily.rangeDateCount,
       referencedLocalImageCount: media.localReferencedCount,
       referencedRemoteImageCount: media.remoteReferencedCount,
     },
@@ -294,7 +287,7 @@ function buildReport(scan, daily, writingEntries, dailyEntries, media, errors) {
       migratedItems: migratedDailyItems,
       migratedDateGroups: dailyEntries.length,
       exactDateGroups: daily.exactDateCount,
-      ambiguousDateGroups: daily.ambiguousDateCount,
+      rangeDateGroups: daily.rangeDateCount,
       unresolvedItems: daily.unresolvedItems,
       entries: dailyEntries,
     },
@@ -316,7 +309,7 @@ function buildReport(scan, daily, writingEntries, dailyEntries, media, errors) {
       dailyTotal: daily.legacyItems,
       dailyMigrated: migratedDailyItems,
       dailyTextOrder: dailyItemsMatch ? 'PASS' : 'FAIL',
-      dailyDateResolution: daily.ambiguousDateCount > 0 || daily.unresolvedItems.length > 0 ? 'REVIEW' : 'PASS',
+      dailyDateResolution: daily.unresolvedItems.length > 0 ? 'REVIEW' : 'PASS',
       missingMedia: media.missingByKey.size,
     },
   };

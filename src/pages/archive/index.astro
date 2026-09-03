@@ -10,6 +10,7 @@ const daily = (await getCollection('daily')).sort(
   (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)} → ${formatDate(end)}` : formatDate(start);
 ---
 
 <BaseLayout title="Archive">
@@ -23,7 +24,7 @@ const formatDate = (date: Date) => date.toISOString().slice(0, 10);
   <section class="archive-section">
     <h2>Daily</h2>
     <ul class="archive-list">
-      {daily.map((entry: CollectionEntry<'daily'>) => <li><span>{formatDate(entry.data.date)}</span><a href="/daily/">{entry.data.legacyDateLabel ?? formatDate(entry.data.date)}</a></li>)}
+      {daily.map((entry: CollectionEntry<'daily'>) => <li><span>{formatDateRange(entry.data.date, entry.data.endDate)}</span><a href="/daily/">{entry.data.legacyDateLabel ?? formatDateRange(entry.data.date, entry.data.endDate)}</a></li>)}
     </ul>
   </section>
 </BaseLayout>

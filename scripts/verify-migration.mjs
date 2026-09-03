@@ -42,8 +42,11 @@ function readLegacyMarkdownEntries(directory) {
   return { entries, parseErrors };
 }
 
-function verifyWriting(scan) {
+function verifyWriting(scan, previousReport = {}) {
   const { entries: files, parseErrors } = readLegacyMarkdownEntries(WRITING_ROOT);
+  const previousWarnings = new Map(
+    (previousReport.writing?.entries || []).map((entry) => [entry.sourceFile, entry.warnings || []]),
+  );
   const bySource = new Map();
   const errors = [...parseErrors];
   for (const entry of files) {
@@ -66,7 +69,7 @@ function verifyWriting(scan) {
       date: post.date,
       destination: entry ? `/writing/${entry.data.slug}/` : null,
       legacyPath: post.legacyPath,
-      warnings: [],
+      warnings: [...(previousWarnings.get(post.sourceFile) || [])],
     };
     if (!entry) {
       reportEntries.push({ ...base, textValidationResult: 'FAIL', failureReasons: ['migrated file is missing'] });
@@ -117,7 +120,10 @@ function verifyWriting(scan) {
       remoteImageCount: comparison.originalStats.remoteImageCount,
       linkCount: comparison.originalStats.linkCount,
       migratedLinkCount: comparison.renderedStats.linkCount,
-      warnings: entry.data.date ? [] : ['date metadata is missing'],
+      warnings: [
+        ...base.warnings,
+        ...(entry.data.date ? [] : ['date metadata is missing']),
+      ],
       difference: comparison.originalText === comparison.renderedText ? null : firstDifference(comparison.originalText, comparison.renderedText),
       failureReasons,
     });
@@ -169,6 +175,7 @@ function verifyDaily(dailySource) {
 
   for (const entry of files) {
     const date = dateOnly(entry.data.date);
+    const endDate = dateOnly(entry.data.endDate);
     const sourceStart = Number(entry.data.sourceOrderStart);
     const sourceEnd = Number(entry.data.sourceOrderEnd);
     const expected = expectedGroups.find(
@@ -177,14 +184,21 @@ function verifyDaily(dailySource) {
     const rendered = listTexts(entry.body);
     const failures = [];
     if (!date || !validDateOnly(date)) failures.push('invalid date');
+    if (entry.data.dateResolution === 'range' && (!endDate || !validDateOnly(endDate))) {
+      failures.push('invalid range endDate');
+    }
+    if (entry.data.dateResolution === 'exact' && endDate) failures.push('exact date unexpectedly has endDate');
     if (!expected) failures.push('source order range does not match legacy schedule');
     if (Number(entry.data.itemCount) !== rendered.items.length) failures.push('itemCount does not match rendered list items');
+    if (rendered.items.some((item) => !item.trim())) failures.push('a migrated Daily item is empty');
     if (expected && date !== expected.date) failures.push('base date differs from legacy date context');
     if (expected && entry.data.dateResolution !== expected.dateResolution) failures.push('date resolution differs');
-    if (expected && expected.dateResolution === 'ambiguous') {
+    if (expected && expected.dateResolution === 'range') {
+      if (endDate !== expected.endDate) failures.push('range endDate differs from legacy date context');
+      if (entry.data.legacyDateLabel !== expected.legacyDateLabel) failures.push('range label differs from legacy heading');
       const expectedCandidates = JSON.stringify(expected.dateCandidates);
       const actualCandidates = JSON.stringify((entry.data.dateCandidates || []).map(dateOnly));
-      if (expectedCandidates !== actualCandidates) failures.push('ambiguous date candidates differ');
+      if (expectedCandidates !== actualCandidates) failures.push('range date candidates differ');
     }
 
     const sourceOrderItems = rendered.items.map((text, index) => ({
@@ -192,11 +206,11 @@ function verifyDaily(dailySource) {
       text,
     }));
     actualGroups.push({ entry, sourceStart, sourceEnd, items: sourceOrderItems, failures });
-    const isReview = entry.data.dateResolution === 'ambiguous';
-    const validationResult = failures.length > 0 ? 'FAIL' : isReview ? 'REVIEW: ambiguous date heading' : 'PASS';
+    const validationResult = failures.length > 0 ? 'FAIL' : 'PASS';
     if (failures.length > 0) errors.push(`Daily group ${path.basename(entry.file)}: ${failures.join(', ')}`);
     reportEntries.push({
       date,
+      endDate,
       legacyDateLabel: entry.data.legacyDateLabel || date,
       dateResolution: entry.data.dateResolution,
       dateCandidates: entry.data.dateCandidates || [date],
@@ -245,7 +259,7 @@ function verifyDaily(dailySource) {
       actualItems.length === expectedItems.length && itemMismatches.length === 0 &&
       actualGroups.every((group) => group.failures.length === 0)
     ),
-    dateResolutionPassed: dailySource.ambiguousDateCount === 0 && dailySource.unresolvedItems.length === 0,
+    dateResolutionPassed: dailySource.unresolvedItems.length === 0,
     itemMismatches,
   };
 }
@@ -288,15 +302,12 @@ function verifyMedia(report, scan) {
 function main() {
   const report = JSON.parse(fs.readFileSync(REPORT_JSON, 'utf8'));
   const scan = scanLegacySite();
-  const writing = verifyWriting(scan);
+  const writing = verifyWriting(scan, report);
   const dailySource = parseDailySchedule();
   const daily = verifyDaily(dailySource);
   const media = verifyMedia(report, scan);
   const errors = [...new Set([...scan.errors, ...writing.errors, ...daily.errors, ...media.errors])];
   const warnings = new Set(report.warnings || []);
-  if (dailySource.ambiguousDateCount > 0) {
-    warnings.add(`${dailySource.ambiguousDateCount} Daily date group(s) require human date assignment review.`);
-  }
   if (media.missing.length > 0) warnings.add(`${media.missing.length} referenced local media file(s) are missing from the legacy snapshot.`);
 
   const contentPassed = writing.failed === 0 && daily.textOrderPassed && media.missing.length === 0 && errors.length === 0;
@@ -316,7 +327,7 @@ function main() {
     migratedItems: daily.migratedItems,
     migratedDateGroups: daily.dateGroups,
     exactDateGroups: dailySource.exactDateCount,
-    ambiguousDateGroups: dailySource.ambiguousDateCount,
+    rangeDateGroups: dailySource.rangeDateCount,
     unresolvedItems: dailySource.unresolvedItems,
     entries: daily.entries,
     mismatchedEntries: daily.itemMismatches,

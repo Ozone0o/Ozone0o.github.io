@@ -413,15 +413,25 @@ function parseMonthHeading(value) {
 function parseDayHeading(value) {
   const normalized = normalizeText(value);
   const exact = normalized.match(/^(\d{1,2})(?:\s*(?:日|号))?$/u);
-  if (exact) return { kind: 'exact', days: [Number(exact[1])], label: normalized };
+  if (exact) return { kind: 'exact', days: [Number(exact[1])], label: normalized, displayLabel: normalized };
   const multiple = normalized.match(
     /^(\d{1,2}(?:\s*(?:&&|&|and|[-–—~～至])\s*\d{1,2})+)\s*(.*)$/iu,
   );
   if (multiple) {
     const days = multiple[1].match(/\d{1,2}/gu).map(Number);
-    return { kind: 'ambiguous', days, label: normalized };
+    const displayLabel = multiple[2]
+      .trim()
+      .replace(/^[（(]\s*/u, '')
+      .replace(/\s*[）)]$/u, '')
+      .trim();
+    return {
+      kind: 'range',
+      days,
+      label: normalized,
+      displayLabel: displayLabel || normalized,
+    };
   }
-  return { kind: 'invalid', days: [], label: normalized };
+  return { kind: 'invalid', days: [], label: normalized, displayLabel: normalized };
 }
 
 export function validDateOnly(value) {
@@ -477,6 +487,7 @@ export function parseDailySchedule() {
   let currentDateResolution = 'exact';
   let currentDateCandidates = [];
   let currentDateLabel = null;
+  let currentDateHeading = null;
   let sourceOrder = 0;
 
   for (const element of body.find('h1, h2, h3, li').toArray()) {
@@ -486,8 +497,10 @@ export function parseDailySchedule() {
       currentYear = year ? Number(year) : null;
       currentMonth = null;
       currentDay = null;
+      currentDateResolution = 'exact';
       currentDateCandidates = [];
       currentDateLabel = null;
+      currentDateHeading = null;
       if (!year) warnings.push(`Unrecognized Daily year heading: ${headingText($, element)}`);
       continue;
     }
@@ -497,8 +510,10 @@ export function parseDailySchedule() {
       if (month) {
         currentMonth = month;
         currentDay = null;
+        currentDateResolution = 'exact';
         currentDateCandidates = [];
         currentDateLabel = null;
+        currentDateHeading = null;
       }
       continue;
     }
@@ -508,7 +523,8 @@ export function parseDailySchedule() {
       currentDay = parsed.kind === 'exact' ? parsed.days[0] : null;
       currentDateResolution = parsed.kind;
       currentDateCandidates = parsed.days;
-      currentDateLabel = label;
+      currentDateLabel = parsed.displayLabel;
+      currentDateHeading = parsed.label;
       if (parsed.kind === 'invalid') {
         warnings.push(`Unrecognized Daily day heading: ${label}`);
       }
@@ -524,7 +540,10 @@ export function parseDailySchedule() {
     const exactDate = currentDateResolution === 'exact' && currentYear && currentMonth && currentDay
       ? dateFromParts(currentYear, currentMonth, currentDay)
       : null;
-    const date = exactDate || (currentDateResolution === 'ambiguous' && hasAllCandidateDates ? candidateDates[0] : null);
+    const date = exactDate || (currentDateResolution === 'range' && hasAllCandidateDates ? candidateDates[0] : null);
+    const endDate = currentDateResolution === 'range' && hasAllCandidateDates
+      ? candidateDates.at(-1)
+      : null;
     let groupKey = null;
     let dateResolution = currentDateResolution;
     let dateCandidates = candidateDates;
@@ -532,11 +551,11 @@ export function parseDailySchedule() {
     if (date && dateResolution === 'exact') {
       groupKey = `exact:${date}`;
       dateCandidates = [date];
-    } else if (date && dateResolution === 'ambiguous') {
-      groupKey = `ambiguous:${date}:${candidateDates.join('-')}:${safeGroupSlug(currentDateLabel)}`;
+    } else if (date && endDate && dateResolution === 'range') {
+      groupKey = `range:${date}:${endDate}:${safeGroupSlug(currentDateLabel)}`;
     } else {
       dateResolution = 'invalid';
-      unresolvedItems.push({ sourceOrder, text: item.text, heading: currentDateLabel });
+      unresolvedItems.push({ sourceOrder, text: item.text, heading: currentDateHeading || currentDateLabel });
       warnings.push(`Daily item ${sourceOrder} could not be assigned a reliable date.`);
     }
 
@@ -545,6 +564,7 @@ export function parseDailySchedule() {
         groups.set(groupKey, {
           key: groupKey,
           date,
+          endDate,
           dateResolution,
           dateCandidates,
           legacyDateLabel: dateResolution === 'exact' ? date : currentDateLabel,
@@ -564,14 +584,14 @@ export function parseDailySchedule() {
   }
 
   const groupList = [...groups.values()];
-  const ambiguousGroups = groupList.filter((group) => group.dateResolution === 'ambiguous');
+  const rangeGroups = groupList.filter((group) => group.dateResolution === 'range');
   const exactGroups = groupList.filter((group) => group.dateResolution === 'exact');
   return {
     sourceFile: relativePath,
     legacyItems: sourceOrder,
     groups: groupList,
     exactDateCount: exactGroups.length,
-    ambiguousDateCount: ambiguousGroups.length,
+    rangeDateCount: rangeGroups.length,
     warnings,
     unresolvedItems,
   };
@@ -661,14 +681,17 @@ export function reportToMarkdown(report) {
     `- Migrated items: ${daily.migratedItems ?? 0}`,
     `- Migrated date groups: ${daily.migratedDateGroups ?? 0}`,
     `- Exact date groups: ${daily.exactDateGroups ?? 0}`,
-    `- Ambiguous date groups: ${daily.ambiguousDateGroups ?? 0}`,
+    `- Range date groups: ${daily.rangeDateGroups ?? 0}`,
     '',
     '| Date / legacy label | Items | Resolution | Validation |',
     '| --- | ---: | --- | --- |',
   );
   for (const entry of daily.entries || []) {
+    const dateLabel = entry.endDate
+      ? `${entry.date} → ${entry.endDate}${entry.legacyDateLabel ? ` — ${entry.legacyDateLabel}` : ''}`
+      : entry.legacyDateLabel || entry.date;
     lines.push(
-      `| ${markdownCell(entry.legacyDateLabel || entry.date)} | ${entry.itemCount ?? 0} | ${markdownCell(entry.dateResolution)} | ${markdownCell(entry.validationResult)} |`,
+      `| ${markdownCell(dateLabel)} | ${entry.itemCount ?? 0} | ${markdownCell(entry.dateResolution)} | ${markdownCell(entry.validationResult)} |`,
     );
   }
   lines.push(
