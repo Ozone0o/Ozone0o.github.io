@@ -1,31 +1,53 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing');
-  return posts.map((entry: CollectionEntry<'writing'>) => ({
+  const posts = (await getCollection('writing')).sort(
+    (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  return posts.map((entry: CollectionEntry<'writing'>, index) => ({
     params: { slug: entry.data.slug },
-    props: { entry },
+    props: {
+      entry,
+      nextEntry: posts[index + 1] ?? null,
+    },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<'writing'>;
+  nextEntry: CollectionEntry<'writing'> | null;
 }
 
-const { entry } = Astro.props as Props;
+const { entry, nextEntry } = Astro.props as Props;
 const { Content } = await render(entry);
-const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
+const description = entry.data.description?.replace(/\s+/gu, ' ').trim().slice(0, 160);
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
-  <article class="prose entry-detail">
-    <header class="entry-detail__header">
-      <p class="entry-meta">{formatDate(entry.data.date)}{entry.data.updated && ` · updated ${formatDate(entry.data.updated)}`}</p>
-      <h1>{entry.data.title}</h1>
-      <p class="legacy-note">Legacy URL: <code>{entry.data.legacyPath}</code></p>
-    </header>
-    <Content />
-  </article>
+<BaseLayout
+  title={entry.data.title}
+  description={description || 'A Writing entry in the Ozone Layer archive.'}
+  activeSection="article"
+>
+  <LayerShell active="article" breadcrumb="WRITING / ARTICLE" mobileBreadcrumb="WRITING">
+    <div class="article-page" aria-labelledby="article-title">
+      <header class="article-header">
+        <p class="article-header__meta">WRITING&nbsp; / &nbsp;{formatDate(entry.data.date)}&nbsp; / &nbsp;{entry.data.lang.toUpperCase()}</p>
+        <h1 id="article-title">{entry.data.title}</h1>
+        {entry.data.description && <p class="article-header__description">{entry.data.description}</p>}
+      </header>
+
+      <div class="article-prose prose">
+        <Content />
+      </div>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="/archive/">← ARCHIVE</a>
+        {nextEntry && <a href={`/writing/${nextEntry.data.slug}/`}>NEXT WRITING →</a>}
+      </nav>
+    </div>
+  </LayerShell>
 </BaseLayout>

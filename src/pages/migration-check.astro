@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
 import report from '../../migration/report.json';
 
 const validation = report.validation ?? {};
@@ -8,34 +7,41 @@ const status = validation.status ?? 'NOT_RUN';
 const statusClass = status === 'PASS' ? 'status--pass' : 'status--review';
 ---
 
-<BaseLayout title="Migration Check">
-  <SectionHeading title="Migration Check" description="Generated counts and integrity results for the legacy snapshot." />
-  <section class:list={["status-banner", statusClass]}>
-    <strong>MIGRATION VALIDATION: {status}</strong>
-    <span>{report.generatedAt ? `Report generated ${report.generatedAt}` : 'Run npm run verify:migration.'}</span>
-  </section>
+<BaseLayout title="Migration Check" description="Generated content integrity results for the Legacy Hexo to Astro migration.">
+  <div class="utility-page">
+    <header class="utility-page__heading">
+      <p class="eyebrow">OZONE LAYER / INTEGRITY</p>
+      <h1>Migration Check</h1>
+      <p>Generated counts and integrity results remain available while the visual layer is being built.</p>
+    </header>
 
-  <section class="check-grid">
-    <div class="check-card"><strong>{validation.writingMigrated ?? 0} / {validation.writingTotal ?? report.legacy?.totalPostCount ?? 0}</strong><span>Writing migrated / total</span></div>
-    <div class="check-card"><strong>{validation.dailyMigrated ?? 0} / {validation.dailyTotal ?? report.legacy?.totalDailyItemCount ?? 0}</strong><span>Daily migrated / total</span></div>
-    <div class="check-card"><strong>{report.media?.missingLocalFiles?.length ?? 0}</strong><span>Missing media</span></div>
-    <div class="check-card"><strong>{report.warnings?.length ?? 0}</strong><span>Warnings</span></div>
-  </section>
-
-  <section class="check-section">
-    <h2>Writing validation</h2>
-    <p>Passed: {validation.writingPassed ?? 0} · Failed: {validation.writingFailed ?? 0}</p>
-  </section>
-  <section class="check-section">
-    <h2>Daily validation</h2>
-    <p>Legacy items: {report.daily?.legacyItems ?? 0} · Migrated items: {report.daily?.migratedItems ?? 0} · Date groups: {report.daily?.migratedDateGroups ?? 0}</p>
-    <p>Exact dates: {report.daily?.exactDateGroups ?? 0} · Date ranges: {report.daily?.rangeDateGroups ?? 0}</p>
-    <p>Text/order: {validation.dailyTextOrder ?? 'not run'} · Date resolution: {validation.dailyDateResolution ?? 'not run'}</p>
-  </section>
-  {report.warnings?.length > 0 && (
-    <section class="check-section warning-box">
-      <h2>Warnings / unresolved issues</h2>
-      <ul>{report.warnings.map((warning) => <li>{warning}</li>)}</ul>
+    <section class:list={['status-banner', statusClass]}>
+      <strong>MIGRATION VALIDATION: {status}</strong>
+      <span>{report.generatedAt ? `Report generated ${report.generatedAt}` : 'Run npm run verify:migration.'}</span>
     </section>
-  )}
+
+    <section class="check-grid" aria-label="Migration totals">
+      <div class="check-card"><strong>{validation.writingMigrated ?? 0} / {validation.writingTotal ?? report.legacy?.totalPostCount ?? 0}</strong><span>Writing migrated / total</span></div>
+      <div class="check-card"><strong>{validation.dailyMigrated ?? 0} / {validation.dailyTotal ?? report.legacy?.totalDailyItemCount ?? 0}</strong><span>Daily migrated / total</span></div>
+      <div class="check-card"><strong>{report.media?.missingLocalFiles?.length ?? 0}</strong><span>Missing media</span></div>
+      <div class="check-card"><strong>{report.warnings?.length ?? 0}</strong><span>Warnings</span></div>
+    </section>
+
+    <section class="check-section">
+      <h2>Writing validation</h2>
+      <p>Passed: {validation.writingPassed ?? 0} · Failed: {validation.writingFailed ?? 0}</p>
+    </section>
+    <section class="check-section">
+      <h2>Daily validation</h2>
+      <p>Legacy items: {report.daily?.legacyItems ?? 0} · Migrated items: {report.daily?.migratedItems ?? 0} · Date groups: {report.daily?.migratedDateGroups ?? 0}</p>
+      <p>Exact dates: {report.daily?.exactDateGroups ?? 0} · Date ranges: {report.daily?.rangeDateGroups ?? 0}</p>
+      <p>Text/order: {validation.dailyTextOrder ?? 'not run'} · Date resolution: {validation.dailyDateResolution ?? 'not run'}</p>
+    </section>
+    {report.warnings?.length > 0 && (
+      <section class="check-section warning-box">
+        <h2>Warnings / unresolved issues</h2>
+        <ul>{report.warnings.map((warning) => <li>{warning}</li>)}</ul>
+      </section>
+    )}
+  </div>
 </BaseLayout>

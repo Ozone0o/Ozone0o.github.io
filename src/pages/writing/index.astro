@@ -1,24 +1,41 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
 
 const posts = (await getCollection('writing')).sort(
   (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
 ---
 
-<BaseLayout title="Writing">
-  <SectionHeading title="Writing" description={`${posts.length} migrated legacy posts.`} />
-  <div class="entry-list">
-    {posts.map((post: CollectionEntry<'writing'>) => (
-      <article class="entry-card">
-        <p class="entry-meta">{formatDate(post.data.date)}</p>
-        <h2><a href={`/writing/${post.data.slug}/`}>{post.data.title}</a></h2>
-        {post.data.description && <p>{post.data.description}</p>}
-        <a class="text-link" href={`/writing/${post.data.slug}/`}>Read entry →</a>
-      </article>
-    ))}
-  </div>
+<BaseLayout
+  title="Writing"
+  description="The complete Writing index for the Ozone Layer archive."
+  activeSection="archive"
+>
+  <LayerShell active="archive" breadcrumb="WRITING / INDEX" mobileBreadcrumb="WRITING">
+    <div class="sheet-content sheet-content--archive writing-index">
+      <header class="section-sheet-header">
+        <div>
+          <h1>WRITING</h1>
+          <p class="section-sheet-header__summary">A content type inside the archive, not another top-level layer.</p>
+        </div>
+        <p class="sheet-status">{posts.length} ENTRIES / LEGACY CONTENT</p>
+      </header>
+
+      <div class="entry-list" aria-label="Writing entries">
+        {posts.map((post: CollectionEntry<'writing'>) => (
+          <article class="entry-card">
+            <p class="entry-meta">{formatDate(post.data.date)}</p>
+            <div>
+              <h2><a href={`/writing/${post.data.slug}/`}>{post.data.title}</a></h2>
+              {post.data.description && <p>{post.data.description}</p>}
+              <a class="text-link" href={`/writing/${post.data.slug}/`}>OPEN ENTRY →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </LayerShell>
 </BaseLayout>
