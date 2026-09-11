@@ -402,6 +402,10 @@
   min-width: 0;
 }
 
+.daily-detail__backlink {
+  flex-basis: 100%;
+}
+
 .daily-detail__nav a {
   text-underline-offset: 0.25rem;
 }
