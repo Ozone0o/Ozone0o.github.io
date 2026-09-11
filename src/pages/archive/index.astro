@@ -2,13 +2,15 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LayerShell from '../../components/layers/LayerShell.astro';
+import { dailyHref } from '../../data/daily';
 
 type WritingEntry = CollectionEntry<'writing'>;
 type DailyEntry = CollectionEntry<'daily'>;
 type ArchiveItem = {
   kind: 'writing' | 'daily';
   key: string;
-  title: string;
+  titleZh: string;
+  titleEn: string;
   date: Date;
   dateLabel: string;
   href: string;
@@ -23,7 +25,8 @@ const archiveItems: ArchiveItem[] = [
   ...writing.map((entry: WritingEntry) => ({
     kind: 'writing' as const,
     key: `writing:${entry.data.slug}`,
-    title: entry.data.title,
+    titleZh: entry.data.title,
+    titleEn: entry.data.title,
     date: entry.data.date,
     dateLabel: formatDate(entry.data.date),
     href: `/writing/${entry.data.slug}/`,
@@ -32,10 +35,11 @@ const archiveItems: ArchiveItem[] = [
   ...daily.map((entry: DailyEntry) => ({
     kind: 'daily' as const,
     key: `daily:${entry.id}`,
-    title: entry.data.legacyDateLabel ?? 'Daily note',
+    titleZh: entry.data.legacyDateLabel ?? '日常记录',
+    titleEn: entry.data.legacyDateLabel ?? 'Daily note',
     date: entry.data.date,
     dateLabel: formatDateRange(entry.data.date, entry.data.endDate),
-    href: `/daily/#daily-${entry.id}`,
+    href: dailyHref(entry),
     year: entry.data.date.getUTCFullYear(),
   })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf() || a.key.localeCompare(b.key));
@@ -62,38 +66,59 @@ const years = [...new Set(archiveItems.map((item) => item.year))].sort((a, b) =>
   description="A deterministic collage of Writing and Daily fragments, ordered by time without becoming a folder tree."
   activeSection="archive"
 >
-  <LayerShell active="archive" breadcrumb="ARCHIVE / COLLAGE" mobileBreadcrumb="ARCHIVE">
+  <LayerShell
+    active="archive"
+    flow
+    breadcrumb="档案"
+    breadcrumbZh="档案 / 拼贴"
+    breadcrumbEn="ARCHIVE / COLLAGE"
+    mobileBreadcrumb="档案"
+    mobileBreadcrumbZh="档案"
+    mobileBreadcrumbEn="ARCHIVE"
+  >
     <div class="sheet-content sheet-content--archive">
       <header class="section-sheet-header">
         <div>
-          <h1>ARCHIVE</h1>
-          <p class="section-sheet-header__summary">Writing, old daily notes, photographs, travel fragments. Time exists, but does not govern the grid.</p>
+          <h1 data-i18n-zh="档案" data-i18n-en="ARCHIVE">档案</h1>
+          <p
+            class="section-sheet-header__summary"
+            data-i18n-zh="随笔、旧日常、照片和旅行碎片。时间存在，但不管理这张网格。"
+            data-i18n-en="Writing, old daily notes, photographs, travel fragments. Time exists, but does not govern the grid."
+          >随笔、旧日常、照片和旅行碎片。时间存在，但不管理这张网格。</p>
         </div>
-        <p class="sheet-status">{archiveItems.length} FRAGMENTS / {years.length} YEARS</p>
+        <p class="sheet-status">
+          {archiveItems.length}
+          <span data-i18n-zh=" 个碎片 / " data-i18n-en=" FRAGMENTS / "> 个碎片 / </span>
+          {years.length}
+          <span data-i18n-zh=" 年" data-i18n-en=" YEARS"> 年</span>
+        </p>
       </header>
 
-      <div class="archive-board" aria-label="Archive fragments">
+      <div class="archive-board" aria-label="档案碎片" data-i18n-aria-zh="档案碎片" data-i18n-aria-en="Archive fragments">
         {archiveItems.map((item, index) => {
           const layout = layoutFor(item, index);
+          const isYearStart = archiveItems.findIndex((candidate) => candidate.year === item.year) === index;
           return (
             <a
               class:list={['archive-fragment', `archive-fragment--${layout.variant}`]}
               href={item.href}
-              id={archiveItems.findIndex((candidate) => candidate.year === item.year) === index ? `archive-${item.year}` : undefined}
+              id={isYearStart ? `archive-${item.year}` : undefined}
               style={`--fragment-left: ${layout.left}; --fragment-top: ${layout.top}; --fragment-width: ${layout.width}; --fragment-rotation: ${layout.rotation};`}
               data-archive-key={item.key}
             >
-              <span class="archive-fragment__meta">{item.kind} / {item.dateLabel}</span>
-              <span class="archive-fragment__title">{item.title}</span>
+              <span class="archive-fragment__meta">
+                <span data-i18n-zh={item.kind === 'writing' ? '随笔' : '日常'} data-i18n-en={item.kind === 'writing' ? 'WRITING' : 'DAILY'}>{item.kind === 'writing' ? '随笔' : '日常'}</span>
+                {' / '}{item.dateLabel}
+              </span>
+              <span class="archive-fragment__title" data-i18n-zh={item.titleZh} data-i18n-en={item.titleEn}>{item.titleZh}</span>
             </a>
           );
         })}
-
-        <nav class="archive-years" aria-label="Archive years">
-          {years.map((year) => <a class="archive-year" href={`#archive-${year}`}>{year}</a>)}
-          <p class="archive-year-note">Year markers are anchors, not folders.</p>
-        </nav>
       </div>
+
+      <nav class="archive-years" aria-label="档案年份" data-i18n-aria-zh="档案年份" data-i18n-aria-en="Archive years">
+        {years.map((year) => <a class="archive-year" href={`#archive-${year}`}>{year}</a>)}
+      </nav>
     </div>
   </LayerShell>
 </BaseLayout>

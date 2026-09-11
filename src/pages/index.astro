@@ -10,9 +10,10 @@ const writing = (await getCollection('writing')).sort(
   (a: CollectionEntry<'writing'>, b: CollectionEntry<'writing'>) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 const latest = writing[0];
+const featuredProject = projects[0];
 const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
 const preview = (value?: string) => {
-  if (!value) return 'A new layer is waiting to be written.';
+  if (!value) return '还没有新的文字记录。';
   const compact = value.replace(/\s+/gu, ' ').trim();
   return compact.length > 92 ? `${compact.slice(0, 92)}…` : compact;
 };
@@ -23,9 +24,20 @@ const preview = (value?: string) => {
   description="A public layer for things being made, noticed, remembered, and left unfinished."
   activeSection="home"
 >
-  <LayerShell active="home" breadcrumb="HOME / HYBRID" mobileBreadcrumb="HOME / MOBILE">
+  <LayerShell
+    active="home"
+    breadcrumb="首页"
+    breadcrumbZh="首页"
+    breadcrumbEn="HOME"
+    mobileBreadcrumb="首页"
+    mobileBreadcrumbZh="首页"
+    mobileBreadcrumbEn="HOME"
+  >
     <div class="home-intro">
-      <p>A public layer for things being made,<br class="desktop-only" /> noticed, remembered, and left unfinished.</p>
+      <p
+        data-i18n-zh="这是一个放置正在制作、被注意、被记住，以及暂时没有完成的事情的公共空间。"
+        data-i18n-en="A public layer for things being made, noticed, remembered, and left unfinished."
+      >这是一个放置正在制作、被注意、被记住，以及暂时没有完成的事情的公共空间。</p>
     </div>
 
     <LayerField
@@ -34,10 +46,13 @@ const preview = (value?: string) => {
       draggable
       rotation="8deg"
       class="home-field home-field--about"
-      ariaLabel="Open About"
+      labelZh="关于"
+      labelEn="ABOUT"
+      ariaLabelZh="打开关于"
+      ariaLabelEn="Open About"
     >
       <div class="home-field__inner">
-        <LayerLabel label="ABOUT" />
+        <LayerLabel label="ABOUT" labelZh="关于" labelEn="ABOUT" />
       </div>
     </LayerField>
 
@@ -47,10 +62,13 @@ const preview = (value?: string) => {
       draggable
       rotation="4deg"
       class="home-field home-field--archive"
-      ariaLabel="Open Archive"
+      labelZh="档案"
+      labelEn="ARCHIVE"
+      ariaLabelZh="打开档案"
+      ariaLabelEn="Open Archive"
     >
       <div class="home-field__inner">
-        <LayerLabel label="ARCHIVE" />
+        <LayerLabel label="ARCHIVE" labelZh="档案" labelEn="ARCHIVE" />
       </div>
     </LayerField>
 
@@ -60,10 +78,13 @@ const preview = (value?: string) => {
       draggable
       rotation="-2deg"
       class="home-field home-field--daily"
-      ariaLabel="Open Daily"
+      labelZh="日常"
+      labelEn="DAILY"
+      ariaLabelZh="打开日常"
+      ariaLabelEn="Open Daily"
     >
       <div class="home-field__inner">
-        <LayerLabel label="DAILY" />
+        <LayerLabel label="DAILY" labelZh="日常" labelEn="DAILY" />
       </div>
     </LayerField>
 
@@ -73,16 +94,22 @@ const preview = (value?: string) => {
       draggable
       rotation="5deg"
       class="home-field home-field--projects"
-      ariaLabel="Open Projects"
+      labelZh="项目"
+      labelEn="PROJECTS"
+      ariaLabelZh="打开项目"
+      ariaLabelEn="Open Projects"
     >
       <div class="home-field__inner">
-        <LayerLabel label="PROJECTS" />
-        <div class="field-fixture">
-          <p class="field-kicker">LATEST PROJECT / DRAFT FIXTURE</p>
-          <p class="field-title">{projects[0].title}</p>
-          <p class="field-summary">Capability documentation that grows with each real robot validation.</p>
+        <LayerLabel label="PROJECTS" labelZh="项目" labelEn="PROJECTS" />
+        <div class="home-project">
+          <p class="field-kicker" data-i18n-zh="最新项目 / 持续整理" data-i18n-en="LATEST PROJECT / ONGOING">最新项目 / 持续整理</p>
+          <p class="field-title">{featuredProject.title}</p>
+          <p class="field-summary" data-i18n-zh={featuredProject.shortDescription.zh} data-i18n-en={featuredProject.shortDescription.en}>{featuredProject.shortDescription.zh}</p>
         </div>
-        <p class="field-meta">{projects[0].title} / visual fixture / open</p>
+        <p class="field-meta">
+          {featuredProject.title} / {featuredProject.year} /
+          <span data-i18n-zh="打开" data-i18n-en="OPEN">打开</span>
+        </p>
       </div>
     </LayerField>
 
@@ -92,16 +119,24 @@ const preview = (value?: string) => {
       draggable
       rotation="-2deg"
       class="home-field home-field--writing"
-      ariaLabel={latest ? `Open latest Writing: ${latest.data.title}` : 'Open Writing'}
+      labelZh="随笔"
+      labelEn="WRITING"
+      ariaLabelZh={latest ? `打开最新随笔：${latest.data.title}` : '打开随笔'}
+      ariaLabelEn={latest ? `Open latest Writing: ${latest.data.title}` : 'Open Writing'}
     >
       <div class="home-field__inner">
-        <p class="field-kicker">RECENT WRITING</p>
-        <p class="field-title">{latest?.data.title ?? 'No writing yet.'}</p>
-        <p class="field-summary">{preview(latest?.data.description)}</p>
-        <p class="field-meta">{latest ? formatDate(latest.data.date) : '—'} &nbsp;→&nbsp; OPEN</p>
+        <p class="field-kicker" data-i18n-zh="最近随笔" data-i18n-en="RECENT WRITING">最近随笔</p>
+        <p class="field-title">
+          {latest ? latest.data.title : <span data-i18n-zh="还没有随笔。" data-i18n-en="No writing yet.">还没有随笔。</span>}
+        </p>
+        <p class="field-summary">
+          {latest ? preview(latest.data.description) : <span data-i18n-zh="还没有新的文字记录。" data-i18n-en="No new writing yet.">还没有新的文字记录。</span>}
+        </p>
+        <p class="field-meta">
+          {latest ? formatDate(latest.data.date) : '—'} &nbsp;→&nbsp;
+          <span data-i18n-zh="打开" data-i18n-en="OPEN">打开</span>
+        </p>
       </div>
     </LayerField>
-
-    <p class="home-instructions">HOVER&nbsp; +18 PX &nbsp;&nbsp;&nbsp; DRAG&nbsp; ±60 PX &nbsp;&nbsp;&nbsp; CLICK&nbsp; → EXPAND / PUSH &nbsp;&nbsp;&nbsp; ESC&nbsp; → HOME</p>
   </LayerShell>
 </BaseLayout>

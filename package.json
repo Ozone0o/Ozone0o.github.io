@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "migrate": "node scripts/migrate-legacy.mjs",
-    "verify:migration": "node scripts/verify-migration.mjs"
+    "verify:migration": "node scripts/verify-migration.mjs",
+    "verify:navigation": "node scripts/verify-navigation.mjs",
+    "verify:browser": "node scripts/verify-browser.mjs"
   },
   "dependencies": {
     "astro": "7.2.10",

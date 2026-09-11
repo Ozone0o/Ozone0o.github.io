@@ -2,20 +2,22 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LayerShell from '../../components/layers/LayerShell.astro';
+import { dailyHref, sortDaily } from '../../data/daily';
 
-const daily = (await getCollection('daily')).sort(
-  (a: CollectionEntry<'daily'>, b: CollectionEntry<'daily'>) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-const visibleDaily = daily.slice(0, 8);
-const rendered = await Promise.all(
-  visibleDaily.map(async (entry: CollectionEntry<'daily'>) => ({ entry, Content: (await render(entry)).Content })),
-);
+const daily = sortDaily(await getCollection('daily'));
 const today = new Date();
 const cutoff = new Date(today);
 cutoff.setDate(cutoff.getDate() - 30);
 const hasRecent = daily.some((entry) => entry.data.date >= cutoff && entry.data.date <= today);
+const visibleDaily = hasRecent
+  ? daily.filter((entry) => entry.data.date >= cutoff && entry.data.date <= today).slice(0, 8)
+  : daily.slice(0, 8);
+const rendered = await Promise.all(
+  visibleDaily.map(async (entry: CollectionEntry<'daily'>) => ({ entry, Content: (await render(entry)).Content })),
+);
 const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
 const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)} → ${formatDate(end)}` : formatDate(start);
+const totalItems = daily.reduce((total, entry) => total + entry.data.itemCount, 0);
 ---
 
 <BaseLayout
@@ -23,24 +25,41 @@ const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)}
   description="Short notes kept as date groups, with explicit legacy ranges preserved."
   activeSection="daily"
 >
-  <LayerShell active="daily" breadcrumb="DAILY / LAST 30 DAYS" mobileBreadcrumb="DAILY">
+  <LayerShell
+    active="daily"
+    breadcrumb="日常"
+    breadcrumbZh="日常 / 最近记录"
+    breadcrumbEn="DAILY / RECENT"
+    mobileBreadcrumb="日常"
+    mobileBreadcrumbZh="日常"
+    mobileBreadcrumbEn="DAILY"
+  >
     <div class="sheet-content sheet-content--daily">
       <header class="section-sheet-header">
         <div>
-          <h1>DAILY</h1>
-          <p class="section-sheet-header__summary">One or two sentences. Nothing needs to become an essay.</p>
+          <h1 data-i18n-zh="日常" data-i18n-en="DAILY">日常</h1>
+          <p
+            class="section-sheet-header__summary"
+            data-i18n-zh="一两句话。不是什么都需要变成一篇文章。"
+            data-i18n-en="One or two sentences. Nothing needs to become an essay."
+          >一两句话。不是什么都需要变成一篇文章。</p>
           {!hasRecent && (
             <p
               class="daily-fallback"
-              data-ui-zh="最近 30 天没有新的 Daily；这里显示最近可用的记录。"
-              data-ui-en="No new Daily in the last 30 days; showing the latest available entries."
+              data-i18n-zh="最近 30 天没有新的 Daily；这里显示最近可用的记录。"
+              data-i18n-en="No new Daily in the last 30 days; showing the latest available entries."
             >最近 30 天没有新的 Daily；这里显示最近可用的记录。</p>
           )}
         </div>
-        <p class="sheet-status">{daily.length} DATE GROUPS / {daily.reduce((total, entry) => total + entry.data.itemCount, 0)} ITEMS</p>
+        <p class="sheet-status">
+          {daily.length}
+          <span data-i18n-zh=" 组日期 / " data-i18n-en=" DATE GROUPS / "> 组日期 / </span>
+          {totalItems}
+          <span data-i18n-zh=" 条记录" data-i18n-en=" ITEMS"> 条记录</span>
+        </p>
       </header>
 
-      <div class="daily-index" aria-label="Latest Daily entries">
+      <div class="daily-index" aria-label="最近日常" data-i18n-aria-zh="最近日常" data-i18n-aria-en="Latest Daily entries">
         {rendered.map(({ entry, Content }) => (
           <article class="daily-row" id={`daily-${entry.id}`}>
             <time class="daily-row__date" datetime={entry.data.date.toISOString()}>
@@ -49,12 +68,18 @@ const formatDateRange = (start: Date, end?: Date) => end ? `${formatDate(start)}
             <div class="daily-row__content">
               {entry.data.legacyDateLabel && <p class="daily-row__label">{entry.data.legacyDateLabel}</p>}
               <div class="daily-row__body prose"><Content /></div>
+              <a class="daily-row__link" href={dailyHref(entry)}>
+                <span data-i18n-zh="打开这组记录" data-i18n-en="OPEN THIS NOTE">打开这组记录</span> →
+              </a>
             </div>
           </article>
         ))}
       </div>
 
-      <a class="daily-archive-link" href="/archive/">OLDER THAN 30 DAYS&nbsp; →&nbsp; ARCHIVE</a>
+      <a class="daily-archive-link" href="/archive/">
+        <span data-i18n-zh="查看旧记录" data-i18n-en="VIEW OLDER ENTRIES">查看旧记录</span>&nbsp; → &nbsp;
+        <span data-i18n-zh="档案" data-i18n-en="ARCHIVE">档案</span>
+      </a>
     </div>
   </LayerShell>
 </BaseLayout>

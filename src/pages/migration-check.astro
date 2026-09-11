@@ -10,36 +10,42 @@ const statusClass = status === 'PASS' ? 'status--pass' : 'status--review';
 <BaseLayout title="Migration Check" description="Generated content integrity results for the Legacy Hexo to Astro migration.">
   <div class="utility-page">
     <header class="utility-page__heading">
-      <p class="eyebrow">OZONE LAYER / INTEGRITY</p>
-      <h1>Migration Check</h1>
-      <p>Generated counts and integrity results remain available while the visual layer is being built.</p>
+      <p class="eyebrow" data-i18n-zh="OZONE LAYER / 完整性" data-i18n-en="OZONE LAYER / INTEGRITY">OZONE LAYER / 完整性</p>
+      <h1 data-i18n-zh="迁移检查" data-i18n-en="Migration Check">迁移检查</h1>
+      <p data-i18n-zh="在视觉层搭建期间，生成的计数和完整性结果仍可在这里查看。" data-i18n-en="Generated counts and integrity results remain available while the visual layer is being built.">在视觉层搭建期间，生成的计数和完整性结果仍可在这里查看。</p>
     </header>
 
     <section class:list={['status-banner', statusClass]}>
-      <strong>MIGRATION VALIDATION: {status}</strong>
-      <span>{report.generatedAt ? `Report generated ${report.generatedAt}` : 'Run npm run verify:migration.'}</span>
+      <strong><span data-i18n-zh="迁移验证" data-i18n-en="MIGRATION VALIDATION">迁移验证</span>: {status}</strong>
+      <span>
+        {report.generatedAt ? (
+          <><span data-i18n-zh="报告生成于 " data-i18n-en="Report generated ">报告生成于 </span>{report.generatedAt}</>
+        ) : (
+          <span data-i18n-zh="请运行 npm run verify:migration。" data-i18n-en="Run npm run verify:migration.">请运行 npm run verify:migration。</span>
+        )}
+      </span>
     </section>
 
-    <section class="check-grid" aria-label="Migration totals">
-      <div class="check-card"><strong>{validation.writingMigrated ?? 0} / {validation.writingTotal ?? report.legacy?.totalPostCount ?? 0}</strong><span>Writing migrated / total</span></div>
-      <div class="check-card"><strong>{validation.dailyMigrated ?? 0} / {validation.dailyTotal ?? report.legacy?.totalDailyItemCount ?? 0}</strong><span>Daily migrated / total</span></div>
-      <div class="check-card"><strong>{report.media?.missingLocalFiles?.length ?? 0}</strong><span>Missing media</span></div>
-      <div class="check-card"><strong>{report.warnings?.length ?? 0}</strong><span>Warnings</span></div>
+    <section class="check-grid" aria-label="迁移总数" data-i18n-aria-zh="迁移总数" data-i18n-aria-en="Migration totals">
+      <div class="check-card"><strong>{validation.writingMigrated ?? 0} / {validation.writingTotal ?? report.legacy?.totalPostCount ?? 0}</strong><span data-i18n-zh="随笔已迁移 / 总数" data-i18n-en="Writing migrated / total">随笔已迁移 / 总数</span></div>
+      <div class="check-card"><strong>{validation.dailyMigrated ?? 0} / {validation.dailyTotal ?? report.legacy?.totalDailyItemCount ?? 0}</strong><span data-i18n-zh="日常已迁移 / 总数" data-i18n-en="Daily migrated / total">日常已迁移 / 总数</span></div>
+      <div class="check-card"><strong>{report.media?.missingLocalFiles?.length ?? 0}</strong><span data-i18n-zh="缺失媒体" data-i18n-en="Missing media">缺失媒体</span></div>
+      <div class="check-card"><strong>{report.warnings?.length ?? 0}</strong><span data-i18n-zh="警告" data-i18n-en="Warnings">警告</span></div>
     </section>
 
     <section class="check-section">
-      <h2>Writing validation</h2>
-      <p>Passed: {validation.writingPassed ?? 0} · Failed: {validation.writingFailed ?? 0}</p>
+      <h2 data-i18n-zh="随笔验证" data-i18n-en="Writing validation">随笔验证</h2>
+      <p><span data-i18n-zh="通过" data-i18n-en="Passed">通过</span>: {validation.writingPassed ?? 0} · <span data-i18n-zh="失败" data-i18n-en="Failed">失败</span>: {validation.writingFailed ?? 0}</p>
     </section>
     <section class="check-section">
-      <h2>Daily validation</h2>
-      <p>Legacy items: {report.daily?.legacyItems ?? 0} · Migrated items: {report.daily?.migratedItems ?? 0} · Date groups: {report.daily?.migratedDateGroups ?? 0}</p>
-      <p>Exact dates: {report.daily?.exactDateGroups ?? 0} · Date ranges: {report.daily?.rangeDateGroups ?? 0}</p>
-      <p>Text/order: {validation.dailyTextOrder ?? 'not run'} · Date resolution: {validation.dailyDateResolution ?? 'not run'}</p>
+      <h2 data-i18n-zh="日常验证" data-i18n-en="Daily validation">日常验证</h2>
+      <p><span data-i18n-zh="历史条目" data-i18n-en="Legacy items">历史条目</span>: {report.daily?.legacyItems ?? 0} · <span data-i18n-zh="已迁移条目" data-i18n-en="Migrated items">已迁移条目</span>: {report.daily?.migratedItems ?? 0} · <span data-i18n-zh="日期组" data-i18n-en="Date groups">日期组</span>: {report.daily?.migratedDateGroups ?? 0}</p>
+      <p><span data-i18n-zh="精确日期" data-i18n-en="Exact dates">精确日期</span>: {report.daily?.exactDateGroups ?? 0} · <span data-i18n-zh="日期范围" data-i18n-en="Date ranges">日期范围</span>: {report.daily?.rangeDateGroups ?? 0}</p>
+      <p><span data-i18n-zh="文本 / 顺序" data-i18n-en="Text / order">文本 / 顺序</span>: {validation.dailyTextOrder ?? 'not run'} · <span data-i18n-zh="日期解析" data-i18n-en="Date resolution">日期解析</span>: {validation.dailyDateResolution ?? 'not run'}</p>
     </section>
     {report.warnings?.length > 0 && (
       <section class="check-section warning-box">
-        <h2>Warnings / unresolved issues</h2>
+        <h2 data-i18n-zh="警告 / 未解决问题" data-i18n-en="Warnings / unresolved issues">警告 / 未解决问题</h2>
         <ul>{report.warnings.map((warning) => <li>{warning}</li>)}</ul>
       </section>
     )}

@@ -4,23 +4,31 @@ export type LayerSection = 'projects' | 'daily' | 'archive' | 'about' | 'writing
 interface Props {
   section: LayerSection;
   label?: string;
+  labelZh?: string;
+  labelEn?: string;
   href?: string;
   active?: boolean;
   draggable?: boolean;
   class?: string;
   rotation?: string;
   ariaLabel?: string;
+  ariaLabelZh?: string;
+  ariaLabelEn?: string;
 }
 
 const {
   section,
   label = section.toUpperCase(),
+  labelZh = label,
+  labelEn = label,
   href,
   active = false,
   draggable = false,
   class: className,
   rotation = '0deg',
   ariaLabel,
+  ariaLabelZh,
+  ariaLabelEn,
 } = Astro.props;
 
 const classes = ['layer-field', `layer-field--${section}`, active && 'layer-field--active', className];
@@ -29,7 +37,11 @@ const attributes = {
   'data-layer-link': href ? 'true' : undefined,
   'data-draggable-layer': draggable ? 'true' : undefined,
   'data-active-layer': active ? 'true' : undefined,
-  'aria-label': ariaLabel ?? (!active && href ? `Open ${label}` : undefined),
+  'aria-label': ariaLabel ?? (!active && href ? `Open ${labelEn}` : undefined),
+  'data-i18n-aria-zh': ariaLabelZh ?? (!active && href ? `打开${labelZh}` : undefined),
+  'data-i18n-aria-en': ariaLabelEn ?? (!active && href ? `Open ${labelEn}` : undefined),
+  'data-i18n-label-zh': labelZh,
+  'data-i18n-label-en': labelEn,
   style: `--rotation: ${rotation};`,
 };
 ---

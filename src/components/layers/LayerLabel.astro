@@ -1,14 +1,20 @@
 ---
 interface Props {
   label: string;
+  labelZh?: string;
+  labelEn?: string;
   detail?: string;
   class?: string;
 }
 
-const { label, detail, class: className } = Astro.props;
+const { label, labelZh = label, labelEn = label, detail, class: className } = Astro.props;
 ---
 
-<span class:list={['layer-field__label', className]}>
-  {label}
+<span
+  class:list={['layer-field__label', className]}
+  data-i18n-zh={labelZh}
+  data-i18n-en={labelEn}
+>
+  {labelZh}
   {detail && <small>{detail}</small>}
 </span>

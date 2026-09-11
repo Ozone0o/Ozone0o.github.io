@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ui } from '../data/i18n';
 
 interface Props {
   title: string;
@@ -28,7 +29,7 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light" data-language="zh">
+<html lang="zh-CN" data-theme="light" data-lang="zh">
   <head>
     <script is:inline>
       (() => {
@@ -37,9 +38,13 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
           const storedTheme = localStorage.getItem('ozone-layer-theme');
           const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           const theme = storedTheme === 'dark' || storedTheme === 'light' ? storedTheme : systemTheme;
-          const language = localStorage.getItem('ozone-layer-language') === 'en' ? 'en' : 'zh';
+          const language = localStorage.getItem('ozone-language') === 'en'
+            ? 'en'
+            : localStorage.getItem('ozone-layer-language') === 'en'
+              ? 'en'
+              : 'zh';
           root.dataset.theme = theme;
-          root.dataset.language = language;
+          root.dataset.lang = language;
           root.lang = language === 'en' ? 'en' : 'zh-CN';
         } catch {
           // The first paint remains usable when storage is unavailable.
@@ -61,19 +66,37 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
     <header class="site-header">
       <div class="site-header__inner">
         <div class="site-brand">
-          <a class="site-title" href="/" aria-label="Ozone Layer home">OZONE LAYER</a>
+          <a
+            class="site-title"
+            href="/"
+            aria-label="返回首页"
+            data-i18n-aria-zh="返回首页"
+            data-i18n-aria-en="Ozone Layer home"
+          >OZONE LAYER</a>
           <span class="site-separator" aria-hidden="true">/</span>
           <span class="site-version">{versionLabel}</span>
         </div>
 
-        <div class="site-controls" aria-label="Site controls">
-          <div class="control-group" aria-label="Language">
+        <div
+          class="site-controls"
+          aria-label={ui.controls.site.zh}
+          data-i18n-aria-zh={ui.controls.site.zh}
+          data-i18n-aria-en={ui.controls.site.en}
+        >
+          <div
+            class="control-group"
+            aria-label={ui.controls.language.zh}
+            data-i18n-aria-zh={ui.controls.language.zh}
+            data-i18n-aria-en={ui.controls.language.en}
+          >
             <button
               class="control-button language-control"
               type="button"
               data-language-option="zh"
               aria-pressed="true"
-              aria-label="Use Chinese interface"
+              aria-label={ui.controls.useChinese.zh}
+              data-i18n-aria-zh={ui.controls.useChinese.zh}
+              data-i18n-aria-en={ui.controls.useChinese.en}
             >ZH</button>
             <span class="control-group__separator" aria-hidden="true">/</span>
             <button
@@ -81,25 +104,40 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
               type="button"
               data-language-option="en"
               aria-pressed="false"
-              aria-label="Use English interface"
+              aria-label={ui.controls.useEnglish.zh}
+              data-i18n-aria-zh={ui.controls.useEnglish.zh}
+              data-i18n-aria-en={ui.controls.useEnglish.en}
             >EN</button>
           </div>
-          <div class="control-group" aria-label="Theme">
+          <div
+            class="control-group"
+            aria-label={ui.controls.theme.zh}
+            data-i18n-aria-zh={ui.controls.theme.zh}
+            data-i18n-aria-en={ui.controls.theme.en}
+          >
             <button
               class="control-button theme-control"
               type="button"
               data-theme-option="light"
               aria-pressed="true"
-              aria-label="Use light theme"
-            >LIGHT</button>
+              aria-label={ui.controls.useLight.zh}
+              data-i18n-aria-zh={ui.controls.useLight.zh}
+              data-i18n-aria-en={ui.controls.useLight.en}
+              data-i18n-zh={ui.controls.light.zh}
+              data-i18n-en={ui.controls.light.en}
+            >浅色</button>
             <span class="control-group__separator" aria-hidden="true">/</span>
             <button
               class="control-button theme-control"
               type="button"
               data-theme-option="dark"
               aria-pressed="false"
-              aria-label="Use dark theme"
-            >DARK</button>
+              aria-label={ui.controls.useDark.zh}
+              data-i18n-aria-zh={ui.controls.useDark.zh}
+              data-i18n-aria-en={ui.controls.useDark.en}
+              data-i18n-zh={ui.controls.dark.zh}
+              data-i18n-en={ui.controls.dark.en}
+            >深色</button>
           </div>
         </div>
       </div>
@@ -125,15 +163,30 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
         };
 
         const setLanguage = (language, persist = true) => {
-          root.dataset.language = language;
-          root.lang = language === 'en' ? 'en' : 'zh-CN';
-          if (persist) localStorage.setItem('ozone-layer-language', language);
+          const nextLanguage = language === 'en' ? 'en' : 'zh';
+          root.dataset.lang = nextLanguage;
+          root.lang = nextLanguage === 'en' ? 'en' : 'zh-CN';
+          if (persist) {
+            localStorage.setItem('ozone-language', nextLanguage);
+            // Keep the previous key readable for existing visitors.
+            localStorage.setItem('ozone-layer-language', nextLanguage);
+          }
           document.querySelectorAll('[data-language-option]').forEach((button) => {
-            button.setAttribute('aria-pressed', button.dataset.languageOption === language ? 'true' : 'false');
+            button.setAttribute('aria-pressed', button.dataset.languageOption === nextLanguage ? 'true' : 'false');
           });
-          document.querySelectorAll('[data-ui-zh][data-ui-en]').forEach((element) => {
-            element.textContent = language === 'en' ? element.dataset.uiEn : element.dataset.uiZh;
+          document.querySelectorAll('[data-i18n-zh][data-i18n-en]').forEach((element) => {
+            const value = nextLanguage === 'en' ? element.dataset.i18nEn : element.dataset.i18nZh;
+            if (value !== undefined) element.textContent = value;
           });
+          document.querySelectorAll('[data-i18n-aria-zh][data-i18n-aria-en]').forEach((element) => {
+            const value = nextLanguage === 'en' ? element.dataset.i18nAriaEn : element.dataset.i18nAriaZh;
+            if (value !== undefined) element.setAttribute('aria-label', value);
+          });
+          document.querySelectorAll('[data-i18n-title-zh][data-i18n-title-en]').forEach((element) => {
+            const value = nextLanguage === 'en' ? element.dataset.i18nTitleEn : element.dataset.i18nTitleZh;
+            if (value !== undefined) element.setAttribute('title', value);
+          });
+          window.dispatchEvent(new CustomEvent('ozone:language-change', { detail: nextLanguage }));
         };
 
         document.querySelectorAll('[data-theme-option]').forEach((button) => {
@@ -145,7 +198,7 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
 
         try {
           const savedTheme = localStorage.getItem('ozone-layer-theme');
-          const savedLanguage = localStorage.getItem('ozone-layer-language');
+          const savedLanguage = localStorage.getItem('ozone-language') ?? localStorage.getItem('ozone-layer-language');
           setTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (themeMedia.matches ? 'dark' : 'light'), false);
           setLanguage(savedLanguage === 'en' ? 'en' : 'zh', false);
           themeMedia.addEventListener('change', (event) => {
@@ -153,7 +206,7 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
           });
         } catch {
           setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light', false);
-          setLanguage(root.dataset.language === 'en' ? 'en' : 'zh', false);
+          setLanguage(root.dataset.lang === 'en' ? 'en' : 'zh', false);
         }
       })();
     </script>

@@ -1,22 +1,38 @@
 ---
 import EdgeLayer from './EdgeLayer.astro';
 import LayerField, { type LayerSection } from './LayerField.astro';
+import { sectionLabels } from '../../data/i18n';
 
 export type ActiveLayer = 'home' | LayerSection | 'article';
 
 interface Props {
   active: ActiveLayer;
   breadcrumb: string;
+  breadcrumbZh?: string;
+  breadcrumbEn?: string;
   mobileBreadcrumb?: string;
+  mobileBreadcrumbZh?: string;
+  mobileBreadcrumbEn?: string;
   class?: string;
+  flow?: boolean;
 }
 
-const { active, breadcrumb, mobileBreadcrumb = breadcrumb, class: className } = Astro.props;
-const sections: Array<{ id: LayerSection; label: string; href: string }> = [
-  { id: 'projects', label: 'PROJECTS', href: '/projects/' },
-  { id: 'daily', label: 'DAILY', href: '/daily/' },
-  { id: 'archive', label: 'ARCHIVE', href: '/archive/' },
-  { id: 'about', label: 'ABOUT', href: '/about/' },
+const {
+  active,
+  breadcrumb,
+  breadcrumbZh = breadcrumb,
+  breadcrumbEn = breadcrumb,
+  mobileBreadcrumb = breadcrumb,
+  mobileBreadcrumbZh = mobileBreadcrumb,
+  mobileBreadcrumbEn = mobileBreadcrumb,
+  class: className,
+  flow = false,
+} = Astro.props;
+const sections: Array<{ id: LayerSection; href: string }> = [
+  { id: 'projects', href: '/projects/' },
+  { id: 'daily', href: '/daily/' },
+  { id: 'archive', href: '/archive/' },
+  { id: 'about', href: '/about/' },
 ];
 const edgeSections =
   active === 'article'
@@ -26,14 +42,31 @@ const edgeSections =
       : sections.filter((section) => section.id !== active);
 ---
 
-<div class:list={['layer-shell', `layer-shell--${active}`, className]} data-layer-root data-active-layer={active}>
+<div
+  class:list={['layer-shell', `layer-shell--${active}`, flow && 'layer-shell--flow', className]}
+  data-layer-root
+  data-active-layer={active}
+>
   <p class="layer-breadcrumb">
-    <span class="layer-breadcrumb__desktop">{breadcrumb}</span>
-    <span class="layer-breadcrumb__mobile">{mobileBreadcrumb}</span>
+    <span
+      class="layer-breadcrumb__desktop"
+      data-i18n-zh={breadcrumbZh}
+      data-i18n-en={breadcrumbEn}
+    >{breadcrumbZh}</span>
+    <span
+      class="layer-breadcrumb__mobile"
+      data-i18n-zh={mobileBreadcrumbZh}
+      data-i18n-en={mobileBreadcrumbEn}
+    >{mobileBreadcrumbZh}</span>
   </p>
   <div class="layer-shell__stage">
     {edgeSections.map((section) => (
-      <EdgeLayer section={section.id} href={section.href} label={section.label} />
+      <EdgeLayer
+        section={section.id}
+        href={section.href}
+        labelZh={sectionLabels[section.id].zh}
+        labelEn={sectionLabels[section.id].en}
+      />
     ))}
 
     {active === 'home' ? (
@@ -45,7 +78,14 @@ const edgeSections =
         </div>
       </article>
     ) : (
-      <LayerField section={active as LayerSection} active ariaLabel={`${active.toUpperCase()} section`}>
+      <LayerField
+        section={active as LayerSection}
+        active
+        labelZh={sectionLabels[active as LayerSection].zh}
+        labelEn={sectionLabels[active as LayerSection].en}
+        ariaLabelZh={`${sectionLabels[active as LayerSection].zh}区域`}
+        ariaLabelEn={`${sectionLabels[active as LayerSection].en} section`}
+      >
         <slot />
       </LayerField>
     )}

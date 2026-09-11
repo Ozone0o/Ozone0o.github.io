@@ -1,0 +1,95 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LayerShell from '../../components/layers/LayerShell.astro';
+import { dailyHref, dailySlug, sortDaily } from '../../data/daily';
+
+export async function getStaticPaths() {
+  const entries = sortDaily(await getCollection('daily'));
+  return entries.map((entry: CollectionEntry<'daily'>, index) => ({
+    params: { slug: dailySlug(entry) },
+    props: {
+      entry,
+      olderEntry: entries[index + 1] ?? null,
+      newerEntry: entries[index - 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'daily'>;
+  olderEntry: CollectionEntry<'daily'> | null;
+  newerEntry: CollectionEntry<'daily'> | null;
+}
+
+const { entry, olderEntry, newerEntry } = Astro.props as Props;
+const { Content } = await render(entry);
+const formatDate = (date: Date) => date.toISOString().slice(0, 10).replaceAll('-', '.');
+const dateLabel = entry.data.endDate
+  ? `${formatDate(entry.data.date)} → ${formatDate(entry.data.endDate)}`
+  : formatDate(entry.data.date);
+const description = entry.data.legacyDateLabel
+  ? `${entry.data.legacyDateLabel} / ${dateLabel}`
+  : `Daily / ${dateLabel}`;
+---
+
+<BaseLayout
+  title={`Daily / ${dateLabel}`}
+  description={description}
+  activeSection="daily"
+>
+  <LayerShell
+    active="daily"
+    flow
+    class="layer-shell--daily-detail"
+    breadcrumb="日常 / 记录"
+    breadcrumbZh="日常 / 记录"
+    breadcrumbEn="DAILY / NOTE"
+    mobileBreadcrumb="日常"
+    mobileBreadcrumbZh="日常"
+    mobileBreadcrumbEn="DAILY"
+  >
+    <div
+      class="sheet-content sheet-content--daily-detail"
+      data-daily-group={dailySlug(entry)}
+      data-daily-source-id={entry.id}
+      data-daily-item-count={entry.data.itemCount}
+    >
+      <header class="daily-detail__header">
+        <p class="daily-detail__kicker" data-i18n-zh="日常记录" data-i18n-en="DAILY NOTE">日常记录</p>
+        <h1>{entry.data.legacyDateLabel ?? dateLabel}</h1>
+        <p class="daily-detail__date">
+          <span data-i18n-zh={entry.data.endDate ? '日期范围' : '日期'} data-i18n-en={entry.data.endDate ? 'DATE RANGE' : 'DATE'}>{entry.data.endDate ? '日期范围' : '日期'}</span>
+          / <time datetime={entry.data.date.toISOString()}>{dateLabel}</time>
+        </p>
+        <p class="daily-detail__count">
+          {entry.data.itemCount}
+          <span data-i18n-zh=" 条原始记录" data-i18n-en=" ORIGINAL ITEMS"> 条原始记录</span>
+        </p>
+      </header>
+
+      <div class="daily-detail__body prose">
+        <Content />
+      </div>
+
+      <nav class="daily-detail__nav" aria-label="日常记录导航" data-i18n-aria-zh="日常记录导航" data-i18n-aria-en="Daily note navigation">
+        <div class="daily-detail__sequence">
+          {olderEntry && (
+            <a href={dailyHref(olderEntry)}>
+              <span data-i18n-zh="← 上一组" data-i18n-en="← PREVIOUS">← 上一组</span>
+            </a>
+          )}
+          {newerEntry && (
+            <a href={dailyHref(newerEntry)}>
+              <span data-i18n-zh="下一组 →" data-i18n-en="NEXT →">下一组 →</span>
+            </a>
+          )}
+        </div>
+        <div class="daily-detail__backlinks">
+          <a href="/daily/"><span data-i18n-zh="返回日常" data-i18n-en="BACK TO DAILY">返回日常</span></a>
+          <a href="/archive/"><span data-i18n-zh="返回档案" data-i18n-en="BACK TO ARCHIVE">返回档案</span></a>
+        </div>
+      </nav>
+    </div>
+  </LayerShell>
+</BaseLayout>

@@ -32,10 +32,20 @@ const description = entry.data.description?.replace(/\s+/gu, ' ').trim().slice(0
   description={description || 'A Writing entry in the Ozone Layer archive.'}
   activeSection="article"
 >
-  <LayerShell active="article" breadcrumb="WRITING / ARTICLE" mobileBreadcrumb="WRITING">
+  <LayerShell
+    active="article"
+    breadcrumb="随笔 / 文章"
+    breadcrumbZh="随笔 / 文章"
+    breadcrumbEn="WRITING / ARTICLE"
+    mobileBreadcrumb="随笔"
+    mobileBreadcrumbZh="随笔"
+    mobileBreadcrumbEn="WRITING"
+  >
     <div class="article-page" aria-labelledby="article-title">
       <header class="article-header">
-        <p class="article-header__meta">WRITING&nbsp; / &nbsp;{formatDate(entry.data.date)}&nbsp; / &nbsp;{entry.data.lang.toUpperCase()}</p>
+        <p class="article-header__meta">
+          <span data-i18n-zh="随笔" data-i18n-en="WRITING">随笔</span>&nbsp; / &nbsp;{formatDate(entry.data.date)}&nbsp; / &nbsp;{entry.data.lang.toUpperCase()}
+        </p>
         <h1 id="article-title">{entry.data.title}</h1>
         {entry.data.description && <p class="article-header__description">{entry.data.description}</p>}
       </header>
@@ -44,9 +54,13 @@ const description = entry.data.description?.replace(/\s+/gu, ' ').trim().slice(0
         <Content />
       </div>
 
-      <nav class="article-nav" aria-label="Article navigation">
-        <a href="/archive/">← ARCHIVE</a>
-        {nextEntry && <a href={`/writing/${nextEntry.data.slug}/`}>NEXT WRITING →</a>}
+      <nav class="article-nav" aria-label="文章导航" data-i18n-aria-zh="文章导航" data-i18n-aria-en="Article navigation">
+        <a href="/archive/"><span data-i18n-zh="← 档案" data-i18n-en="← ARCHIVE">← 档案</span></a>
+        {nextEntry && (
+          <a href={`/writing/${nextEntry.data.slug}/`}>
+            <span data-i18n-zh="下一篇随笔 →" data-i18n-en="NEXT WRITING →">下一篇随笔 →</span>
+          </a>
+        )}
       </nav>
     </div>
   </LayerShell>
