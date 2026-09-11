@@ -37,9 +37,13 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-page: clamp(18px, 2.7778vw, 40px);
+  --page-pad-x: clamp(20px, 5vw, 96px);
+  --page-pad-y: clamp(1.25rem, 3vw, 3rem);
+  --content-max: 72rem;
+  --section-gap: clamp(2.5rem, 6vw, 6rem);
 
   --header-height: 62px;
-  --edge-width: 24px;
+  --edge-width: clamp(22px, 2.5vw, 36px);
   --edge-height: 150px;
   --drag-limit: 60px;
 

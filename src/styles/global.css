@@ -80,11 +80,17 @@ a:focus-visible {
 .site-separator,
 .site-controls,
 .control-button {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 0.6875rem;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.site-title,
+.site-version,
+.site-separator {
+  font-family: var(--font-mono);
 }
 
 .site-title {
@@ -163,10 +169,19 @@ a:focus-visible {
 }
 
 .prose {
+  font-family: var(--font-cjk);
   color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.2rem);
+  line-height: 1.8;
   overflow-wrap: anywhere;
+}
+
+html[data-lang='en'] .prose {
+  font-family: var(--font-sans);
+}
+
+.prose > * {
+  max-width: 100%;
 }
 
 .prose > :first-child {
@@ -204,6 +219,11 @@ a:focus-visible {
   margin-block: 2rem;
 }
 
+.prose :where(video, iframe, embed, object) {
+  display: block;
+  max-width: 100%;
+}
+
 .prose a {
   text-underline-offset: 0.2em;
 }
@@ -238,9 +258,9 @@ a:focus-visible {
 
 /* The migration report remains available as a utility route. */
 .utility-page {
-  width: min(100% - 2 * var(--space-page), 72rem);
+  width: min(calc(100% - 2 * var(--page-pad-x)), var(--content-max));
   margin-inline: auto;
-  padding-block: clamp(2rem, 7vw, 6rem);
+  padding-block: var(--page-pad-y);
 }
 
 .utility-page__heading {
@@ -341,7 +361,7 @@ a:focus-visible {
 }
 
 .empty-state {
-  width: min(100% - 2 * var(--space-page), 40rem);
+  width: min(calc(100% - 2 * var(--page-pad-x)), 40rem);
   margin-inline: auto;
   padding-block: 15vh;
 }

@@ -76,18 +76,14 @@ const description = entry.data.legacyDateLabel
         <div class="daily-detail__sequence">
           {olderEntry && (
             <a href={dailyHref(olderEntry)}>
-              <span data-i18n-zh="← 上一组" data-i18n-en="← PREVIOUS">← 上一组</span>
+              <span data-i18n-zh="← 上一条" data-i18n-en="← PREVIOUS">← 上一条</span>
             </a>
           )}
           {newerEntry && (
             <a href={dailyHref(newerEntry)}>
-              <span data-i18n-zh="下一组 →" data-i18n-en="NEXT →">下一组 →</span>
+              <span data-i18n-zh="下一条 →" data-i18n-en="NEXT →">下一条 →</span>
             </a>
           )}
-        </div>
-        <div class="daily-detail__backlinks">
-          <a href="/daily/"><span data-i18n-zh="返回日常" data-i18n-en="BACK TO DAILY">返回日常</span></a>
-          <a href="/archive/"><span data-i18n-zh="返回档案" data-i18n-en="BACK TO ARCHIVE">返回档案</span></a>
         </div>
       </nav>
     </div>

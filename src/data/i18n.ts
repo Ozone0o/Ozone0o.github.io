@@ -32,8 +32,8 @@ export const ui = {
   navigation: {
     open: { zh: '打开', en: 'Open' },
     back: { zh: '返回', en: 'Back' },
-    previous: { zh: '上一组', en: 'Previous' },
-    next: { zh: '下一组', en: 'Next' },
+    previous: { zh: '上一条', en: 'Previous' },
+    next: { zh: '下一条', en: 'Next' },
     home: { zh: '首页', en: 'Home' },
     archive: { zh: '档案', en: 'Archive' },
     projects: { zh: '项目', en: 'Projects' },
