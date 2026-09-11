@@ -15,61 +15,94 @@ interface Props {
 }
 
 const { project } = Astro.props as Props;
-const timeline = project.timeline.length > 0
-  ? project.timeline
-  : [{ date: 'TBD', title: 'Project notes pending', description: 'A real project timeline will be added in a later content pass.' }];
 ---
 
 <BaseLayout
   title={project.title}
-  description={`${project.title} — project detail layer.`}
+  description={`${project.title} project detail layer.`}
   activeSection="projects"
 >
-  <LayerShell active="projects" class="layer-shell--project-detail" breadcrumb={`PROJECTS / ${project.title.toUpperCase()}`} mobileBreadcrumb="PROJECTS">
+  <LayerShell
+    active="projects"
+    class="layer-shell--project-detail"
+    breadcrumb={`项目 / ${project.title}`}
+    breadcrumbZh={`项目 / ${project.title}`}
+    breadcrumbEn={`PROJECTS / ${project.title.toUpperCase()}`}
+    mobileBreadcrumb="项目"
+    mobileBreadcrumbZh="项目"
+    mobileBreadcrumbEn="PROJECTS"
+  >
     <div class="sheet-content sheet-content--project-detail">
       <header class="project-detail__header">
         <div>
           <h1>{project.title.toUpperCase()}</h1>
-          <p class="project-detail__summary">{project.summary}</p>
+          <p class="project-detail__summary" data-i18n-zh={project.summary.zh} data-i18n-en={project.summary.en}>{project.summary.zh}</p>
         </div>
-        <p class="project-detail__fixture">DRAFT / VISUAL FIXTURE<br />NOT A FACTUAL PROJECT RECORD</p>
       </header>
 
-      <div class="project-detail__meta" aria-label="Project metadata">
-        <span>STATUS / {project.status}</span>
-        <span>TYPE / PROJECT LAYER</span>
-        <span>RANGE / {project.year}</span>
+      <div class="project-detail__meta" aria-label="项目元数据" data-i18n-aria-zh="项目元数据" data-i18n-aria-en="Project metadata">
+        <span>
+          <span data-i18n-zh="状态" data-i18n-en="STATUS">状态</span>
+          / <span data-i18n-zh={project.status.zh} data-i18n-en={project.status.en}>{project.status.zh}</span>
+        </span>
+        <span>
+          <span data-i18n-zh="类型" data-i18n-en="TYPE">类型</span>
+          / <span data-i18n-zh="项目" data-i18n-en="PROJECT LAYER">项目</span>
+        </span>
+        <span>
+          <span data-i18n-zh="时间" data-i18n-en="RANGE">时间</span>
+          / {project.year}
+        </span>
       </div>
 
       <section class="project-timeline" aria-labelledby="timeline-heading">
-        <h2 id="timeline-heading" class="sr-only">Project timeline</h2>
-        {timeline.map((item) => (
+        <h2 id="timeline-heading" class="sr-only" data-i18n-zh="项目时间线" data-i18n-en="Project timeline">项目时间线</h2>
+        {project.timeline.map((item) => (
           <article class="timeline-item">
             <time class="timeline-item__date">{item.date}</time>
             <span class="timeline-item__node" aria-hidden="true"></span>
             <div class="timeline-item__body">
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
+              <h3 data-i18n-zh={item.title.zh} data-i18n-en={item.title.en}>{item.title.zh}</h3>
+              <p data-i18n-zh={item.description.zh} data-i18n-en={item.description.en}>{item.description.zh}</p>
             </div>
           </article>
         ))}
       </section>
 
-      <section class="project-evidence" aria-label="Project evidence">
+      <section class="project-evidence" aria-label="项目结果和证据" data-i18n-aria-zh="项目结果和证据" data-i18n-aria-en="Project result and evidence">
         <figure class="project-note project-note--top">
-          <figcaption>CURRENT RESULT / TODO</figcaption>
-          <p>Images, diagrams, links, and notes will live here when real project data is ready.</p>
+          <figcaption data-i18n-zh="当前状态" data-i18n-en="CURRENT STATE">当前状态</figcaption>
+          <p data-i18n-zh={project.currentResult.zh} data-i18n-en={project.currentResult.en}>{project.currentResult.zh}</p>
         </figure>
         <figure class="project-note project-note--bottom">
-          <figcaption>EVIDENCE / TODO</figcaption>
-          <p>[ screenshots ]<br />[ diagrams ]<br />[ external links ]</p>
+          <figcaption data-i18n-zh="证据摘要" data-i18n-en="EVIDENCE SUMMARY">证据摘要</figcaption>
+          <p data-i18n-zh={project.evidence.zh} data-i18n-en={project.evidence.en}>{project.evidence.zh}</p>
         </figure>
       </section>
 
-      <nav class="project-detail__links" aria-label="Project links">
-        <a href="/projects/">← PROJECTS</a>
-        <span>GITHUB / TODO</span>
-        <span>NOTES / TODO</span>
+      <section
+        class="project-detail__facts"
+        aria-label="项目事实"
+        data-i18n-aria-zh="项目事实"
+        data-i18n-aria-en="Project facts"
+      >
+        <div>
+          <h2 data-i18n-zh="贡献" data-i18n-en="CONTRIBUTION">贡献</h2>
+          <p data-i18n-zh={project.role.zh} data-i18n-en={project.role.en}>{project.role.zh}</p>
+        </div>
+        <div>
+          <h2 data-i18n-zh="技术" data-i18n-en="TECHNOLOGIES">技术</h2>
+          <p>{project.technologies.join(' / ')}</p>
+        </div>
+      </section>
+
+      <nav class="project-detail__links" aria-label="项目链接" data-i18n-aria-zh="项目链接" data-i18n-aria-en="Project links">
+        <a href="/projects/" data-i18n-zh="← 项目" data-i18n-en="← PROJECTS">← 项目</a>
+        {project.repositories.map((repository) => (
+          <a href={repository.href} target="_blank" rel="noopener noreferrer">
+            <span data-i18n-zh="查看源码" data-i18n-en="VIEW SOURCE">查看源码</span> / {repository.name}
+          </a>
+        ))}
       </nav>
     </div>
   </LayerShell>

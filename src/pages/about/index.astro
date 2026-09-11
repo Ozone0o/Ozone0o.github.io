@@ -1,38 +1,120 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LayerShell from '../../components/layers/LayerShell.astro';
+import { aboutContent } from '../../data/about';
+
+const { lead, sections } = aboutContent;
+const [whatSection, whySection, meSection, shortSection, currentSection, futureSection] = sections;
 ---
 
 <BaseLayout
   title="About"
-  description="A personal, informal, privacy-conscious description of Ozone Layer."
+  description="The original personal introduction to ozone layer, restored from the legacy site."
   activeSection="about"
 >
-  <LayerShell active="about" breadcrumb="ABOUT" mobileBreadcrumb="ABOUT">
+  <LayerShell
+    active="about"
+    flow
+    breadcrumb="关于"
+    breadcrumbZh="关于"
+    breadcrumbEn="ABOUT"
+    mobileBreadcrumb="关于"
+    mobileBreadcrumbZh="关于"
+    mobileBreadcrumbEn="ABOUT"
+  >
     <div class="sheet-content sheet-content--about">
       <div class="about-layout">
-        <section class="about-lead">
-          <h1>ABOUT</h1>
-          <p class="about-lead__intro">ozone layer is maintained by ozoneo0.</p>
-          <p>This is a place for small software, robot experiments, unfinished notes, travel writing, and things that seemed worth keeping.</p>
-          <p>It is public, but not intimate. There is no real name, school, location history, or résumé here. The boundary is deliberate.</p>
-        </section>
+        <div class="about-main">
+          <section class="about-lead">
+            <h1 data-i18n-zh={lead.title.zh} data-i18n-en={lead.title.en}>{lead.title.zh}</h1>
+            {lead.paragraphs?.map((paragraph, index) => (
+              <p
+                class:list={[index === 0 && 'about-lead__intro']}
+                data-i18n-zh={paragraph.zh}
+                data-i18n-en={paragraph.en}
+              >{paragraph.zh}</p>
+            ))}
+          </section>
+
+          <section class="about-section">
+            <h2 data-i18n-zh={whatSection.title.zh} data-i18n-en={whatSection.title.en}>{whatSection.title.zh}</h2>
+            <ul class="about-list about-list--columns">
+              {whatSection.items?.map((item) => (
+                <li
+                  data-i18n-zh={`${item.label?.zh ?? ''}：${item.text.zh}`}
+                  data-i18n-en={`${item.label?.en ?? ''}: ${item.text.en}`}
+                >{item.label?.zh}：{item.text.zh}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="about-section about-section--long">
+            <h2 data-i18n-zh={whySection.title.zh} data-i18n-en={whySection.title.en}>{whySection.title.zh}</h2>
+            {whySection.paragraphs?.map((paragraph) => (
+              <p data-i18n-zh={paragraph.zh} data-i18n-en={paragraph.en}>{paragraph.zh}</p>
+            ))}
+          </section>
+
+          <section class="about-section">
+            <h2 data-i18n-zh={meSection.title.zh} data-i18n-en={meSection.title.en}>{meSection.title.zh}</h2>
+            {meSection.paragraphs?.map((paragraph) => (
+              <p data-i18n-zh={paragraph.zh} data-i18n-en={paragraph.en}>{paragraph.zh}</p>
+            ))}
+          </section>
+
+          <section class="about-section">
+            <h2 data-i18n-zh={shortSection.title.zh} data-i18n-en={shortSection.title.en}>{shortSection.title.zh}</h2>
+            {shortSection.paragraphs?.map((paragraph) => (
+              <p class="about-short" data-i18n-zh={paragraph.zh} data-i18n-en={paragraph.en}>{paragraph.zh}</p>
+            ))}
+          </section>
+
+          <div class="about-dual-sections">
+            <section class="about-section about-section--compact">
+              <h2 data-i18n-zh={currentSection.title.zh} data-i18n-en={currentSection.title.en}>{currentSection.title.zh}</h2>
+              <ul class="about-list">
+                {currentSection.items?.map((item) => (
+                  <li data-i18n-zh={item.text.zh} data-i18n-en={item.text.en}>{item.text.zh}</li>
+                ))}
+              </ul>
+            </section>
+            <section class="about-section about-section--compact">
+              <h2 data-i18n-zh={futureSection.title.zh} data-i18n-en={futureSection.title.en}>{futureSection.title.zh}</h2>
+              <ul class="about-list">
+                {futureSection.items?.map((item) => (
+                  <li data-i18n-zh={item.text.zh} data-i18n-en={item.text.en}>{item.text.zh}</li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        </div>
 
         <aside class="about-note">
-          <span class="field-kicker">NOW / 09.2026</span>
-          <p>building robot tooling<br />redesigning this site<br />writing less than intended</p>
+          <span class="field-kicker" data-i18n-zh="一间自己的房间" data-i18n-en="A ROOM OF ONE’S OWN">一间自己的房间</span>
+          <p data-i18n-zh="我希望这里也能成为一个 a room of one’s own。" data-i18n-en="I hope this can become a room of my own too.">我希望这里也能成为一个 a room of one’s own。</p>
         </aside>
       </div>
 
-      <section class="about-likes">
-        <p class="field-kicker">LIKES</p>
-        <p>flat graphics / odd websites / trains / hardware / maps / things with visible seams</p>
-      </section>
-
-      <nav class="about-links" aria-label="About links">
-        <a href="https://github.com/Ozone0o/Ozone0o.github.io" rel="me">GITHUB&nbsp; ↗</a>
-        <span>EMAIL&nbsp; / TODO</span>
-        <span>RSS&nbsp; / TODO</span>
+      <nav class="about-links" aria-label="关于链接" data-i18n-aria-zh="关于链接" data-i18n-aria-en="About links">
+        <a
+          href="https://github.com/Ozone0o"
+          target="_blank"
+          rel="me noopener noreferrer"
+          aria-label="打开 GitHub 个人主页"
+          data-i18n-aria-zh="打开 GitHub 个人主页"
+          data-i18n-aria-en="Open GitHub profile"
+          data-i18n-zh="GITHUB ↗"
+          data-i18n-en="GITHUB ↗"
+        >GITHUB ↗</a>
+        <span data-i18n-zh="邮箱 / 旧站未公开" data-i18n-en="EMAIL / NOT PUBLISHED IN LEGACY">邮箱 / 旧站未公开</span>
+        <a
+          href="/atom.xml"
+          aria-label="打开 RSS"
+          data-i18n-aria-zh="打开 RSS"
+          data-i18n-aria-en="Open RSS"
+          data-i18n-zh="RSS ↗"
+          data-i18n-en="RSS ↗"
+        >RSS ↗</a>
       </nav>
     </div>
   </LayerShell>
