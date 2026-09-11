@@ -1,4 +1,4 @@
-/* Home / hybrid field */
+/* Home field */
 .layer-shell--home {
   min-height: calc(100svh - var(--header-height));
 }
@@ -154,16 +154,8 @@
   bottom: 1.25rem;
 }
 
-.home-field--projects .field-fixture {
+.home-field--projects .home-project {
   margin-top: 1.15rem;
-}
-
-.home-instructions {
-  position: absolute;
-  z-index: 10;
-  bottom: 1.5rem;
-  left: var(--space-page);
-  color: var(--muted);
 }
 
 /* Expanded sections */
@@ -203,15 +195,6 @@
   text-align: right;
 }
 
-.fixture-note {
-  margin-top: 0.55rem;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
 .project-index {
   margin: 2rem 0 0;
   border-top: 1px solid color-mix(in srgb, var(--field-projects) 55%, var(--ink));
@@ -219,7 +202,7 @@
 
 .project-entry {
   display: grid;
-  grid-template-columns: 3.75rem minmax(10rem, 1.1fr) minmax(12rem, 1.6fr) minmax(7rem, 0.8fr) 1.5rem;
+  grid-template-columns: 3.75rem minmax(10rem, 1.1fr) minmax(12rem, 1.6fr) minmax(6rem, 0.7fr) minmax(8rem, 0.9fr) 1.5rem;
   align-items: center;
   gap: 0.75rem;
   min-height: 7rem;
@@ -320,6 +303,15 @@
   margin-top: 0.5rem;
 }
 
+.daily-row__link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  text-underline-offset: 0.25rem;
+}
+
 .daily-archive-link {
   display: inline-block;
   margin-top: 2rem;
@@ -327,6 +319,69 @@
   font-size: 0.6875rem;
   text-transform: uppercase;
   text-underline-offset: 0.3em;
+}
+
+.sheet-content--daily-detail {
+  padding: clamp(3.5rem, 4.55vw, 4.1rem) clamp(2.5rem, 4.17vw, 3.75rem) 4rem;
+}
+
+.daily-detail__header {
+  max-width: 45rem;
+}
+
+.daily-detail__kicker {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.daily-detail__header h1 {
+  margin-top: 1.75rem;
+  font-size: clamp(2rem, 3.1vw, 3rem);
+  line-height: 1.15;
+}
+
+.daily-detail__date,
+.daily-detail__count {
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.daily-detail__count {
+  color: var(--muted);
+}
+
+.daily-detail__body {
+  max-width: 48rem;
+  margin-top: 4.5rem;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.daily-detail__nav {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--field-daily) 55%, var(--ink));
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+.daily-detail__sequence,
+.daily-detail__backlinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.daily-detail__nav a {
+  text-underline-offset: 0.25rem;
 }
 
 .sheet-content--archive {
@@ -341,6 +396,7 @@
 
 .archive-fragment {
   position: absolute;
+  display: block;
   top: var(--fragment-top);
   left: var(--fragment-left);
   width: var(--fragment-width);
@@ -389,14 +445,12 @@
 }
 
 .archive-years {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
   align-items: baseline;
+  margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid color-mix(in srgb, var(--field-archive) 55%, var(--ink));
 }
@@ -409,13 +463,6 @@
 .archive-year:hover {
   text-decoration: underline;
   text-underline-offset: 0.25rem;
-}
-
-.archive-year-note {
-  flex-basis: 100%;
-  margin-top: 0.25rem;
-  color: var(--muted);
-  font-size: 0.625rem;
 }
 
 .sheet-content--about {
@@ -446,6 +493,64 @@
 
 .about-lead p + p {
   margin-top: 2.5rem;
+}
+
+.about-main {
+  max-width: 48rem;
+}
+
+.about-section {
+  margin-top: clamp(4rem, 7vw, 6rem);
+}
+
+.about-section h2 {
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.about-section p {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.about-section--long p + p {
+  margin-top: 1.75rem;
+}
+
+.about-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.about-list li {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.about-list--columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2rem;
+}
+
+.about-short {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem !important;
+  line-height: 1.75 !important;
+}
+
+.about-dual-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem;
+}
+
+.about-section--compact {
+  margin-top: clamp(3.5rem, 6vw, 5rem);
 }
 
 .about-note {
@@ -630,17 +735,6 @@
   line-height: 1.45;
 }
 
-.project-detail__fixture {
-  flex: none;
-  padding-top: 0.35rem;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  line-height: 1.5;
-  text-align: right;
-  text-transform: uppercase;
-}
-
 .project-detail__meta {
   display: flex;
   flex-wrap: wrap;
@@ -721,27 +815,29 @@
 }
 
 .project-evidence {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  max-width: 52rem;
+  margin: 0 0 0 18%;
 }
 
 .project-note {
-  position: absolute;
-  right: 8%;
-  width: min(23rem, 34%);
-  min-height: 11rem;
+  position: relative;
+  width: auto;
+  min-height: 12rem;
   padding: 1.5rem;
   background: var(--paper);
   transform: rotate(-2deg);
 }
 
 .project-note--top {
-  top: 0.5rem;
+  top: auto;
 }
 
 .project-note--bottom {
-  top: 41%;
+  top: auto;
   transform: rotate(2deg);
 }
 
@@ -758,13 +854,37 @@
   line-height: 1.45;
 }
 
+.project-detail__facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(12rem, 0.8fr);
+  gap: 2rem;
+  max-width: 52rem;
+  margin: 3.5rem 0 0 18%;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--field-projects) 55%, var(--ink));
+}
+
+.project-detail__facts h2 {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.project-detail__facts p {
+  max-width: 34rem;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
 .project-detail__links {
-  position: absolute;
-  bottom: 1.5rem;
-  left: clamp(2.5rem, 3.05vw, 3.75rem);
+  position: relative;
+  left: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 1.75rem;
+  margin-top: 3rem;
   font-family: var(--font-mono);
   font-size: 0.625rem;
   text-transform: uppercase;
@@ -864,7 +984,7 @@
     font-size: 0.5rem;
   }
 
-  .home-field--projects .field-fixture {
+  .home-field--projects .home-project {
     margin-top: 0.9rem;
   }
 
@@ -880,13 +1000,6 @@
 
   .home-field--writing .field-meta {
     display: none;
-  }
-
-  .home-instructions {
-    bottom: 0.75rem;
-    left: 18px;
-    font-size: 0.5rem;
-    text-transform: none;
   }
 
   .section-sheet-header {
@@ -918,21 +1031,8 @@
     font-size: 0.5rem;
   }
 
-  .fixture-note {
-    font-size: 0.5rem;
-  }
-
   .sheet-content--projects .sheet-status {
     display: none;
-  }
-
-  .sheet-content--projects .fixture-note {
-    position: absolute;
-    right: 1.25rem;
-    bottom: 1.5rem;
-    left: 1.25rem;
-    margin-top: 0;
-    font-size: 0.5rem;
   }
 
   .project-index {
@@ -1014,6 +1114,32 @@
     font-size: 0.5625rem;
   }
 
+  .sheet-content--daily-detail {
+    padding: 2.25rem 1.25rem 2rem;
+  }
+
+  .daily-detail__header h1 {
+    margin-top: 1.25rem;
+    font-size: 1.55rem;
+  }
+
+  .daily-detail__date,
+  .daily-detail__count {
+    margin-top: 0.9rem;
+    font-size: 0.5625rem;
+  }
+
+  .daily-detail__body {
+    margin-top: 2.75rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .daily-detail__nav {
+    margin-top: 3rem;
+    font-size: 0.5625rem;
+  }
+
   .archive-board {
     min-height: 0;
     margin-top: 2rem;
@@ -1057,6 +1183,10 @@
     display: block;
   }
 
+  .about-main {
+    max-width: none;
+  }
+
   .about-lead__intro {
     margin-top: 1.5rem;
     font-size: 1rem;
@@ -1064,6 +1194,52 @@
 
   .about-lead p + p {
     margin-top: 1.5rem;
+  }
+
+  .about-section {
+    margin-top: 3.5rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.15rem;
+  }
+
+  .about-section p {
+    margin-top: 1.15rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .about-section--long p + p {
+    margin-top: 1.35rem;
+  }
+
+  .about-list {
+    margin-top: 1.15rem;
+  }
+
+  .about-list li {
+    font-size: 0.75rem;
+  }
+
+  .about-list--columns {
+    display: block;
+  }
+
+  .about-list--columns li + li {
+    margin-top: 0.7rem;
+  }
+
+  .about-short {
+    font-size: 0.625rem !important;
+  }
+
+  .about-dual-sections {
+    display: block;
+  }
+
+  .about-section--compact {
+    margin-top: 3.5rem;
   }
 
   .about-note {
@@ -1076,15 +1252,6 @@
   .about-note p {
     margin-top: 1.5rem;
     font-size: 0.9rem;
-  }
-
-  .about-likes {
-    margin-top: 4rem;
-  }
-
-  .about-likes p {
-    margin-top: 1rem;
-    font-size: 0.8rem;
   }
 
   .about-links {
@@ -1158,13 +1325,6 @@
     font-size: 0.8rem;
   }
 
-  .project-detail__fixture {
-    margin-top: 1rem;
-    padding: 0;
-    font-size: 0.5rem;
-    text-align: left;
-  }
-
   .project-detail__meta {
     display: block;
     margin-top: 1.5rem;
@@ -1216,11 +1376,11 @@
   }
 
   .project-evidence {
-    position: relative;
-    inset: auto;
     display: grid;
+    grid-template-columns: 1fr;
     gap: 1.75rem;
-    margin-top: -2rem;
+    margin-top: 0;
+    margin-left: 0;
   }
 
   .project-note,
@@ -1243,6 +1403,20 @@
   .project-note p {
     margin-top: 1rem;
     font-size: 0.75rem;
+  }
+
+  .project-detail__facts {
+    display: block;
+    margin-top: 2.5rem;
+    margin-left: 0;
+  }
+
+  .project-detail__facts + .project-detail__links {
+    margin-top: 2.5rem;
+  }
+
+  .project-detail__facts div + div {
+    margin-top: 1.75rem;
   }
 
   .project-detail__links {

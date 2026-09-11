@@ -42,8 +42,7 @@ pre,
 .project-number,
 .project-year,
 .archive-year,
-.archive-fragment__meta,
-.home-instructions {
+.archive-fragment__meta {
   font-family: var(--font-mono);
   letter-spacing: 0;
 }
@@ -53,8 +52,7 @@ pre,
 .field-kicker,
 .field-meta,
 .sheet-status,
-.archive-fragment__meta,
-.home-instructions {
+.archive-fragment__meta {
   font-size: 0.625rem;
   line-height: 1.4;
   text-transform: uppercase;

@@ -258,6 +258,45 @@
     left: 0;
   }
 
+  /* Long collage pages keep the active sheet in normal flow so content can
+     determine the page height instead of being clipped by a fixed stage. */
+  .layer-shell--flow .layer-shell__stage {
+    min-height: 0;
+    padding-bottom: 7rem;
+  }
+
+  .layer-shell--flow .layer-field--active {
+    position: relative;
+    top: 0;
+    right: auto;
+    left: auto;
+    width: calc(100% - 2 * clamp(32px, 6.597vw, 95px));
+    margin-top: 25px;
+    margin-right: clamp(32px, 6.597vw, 95px);
+    margin-left: clamp(32px, 6.597vw, 95px);
+  }
+
+  .layer-shell--about.layer-shell--flow .layer-field--active {
+    width: calc(100% - 2 * clamp(32px, 10.069vw, 145px));
+    margin-top: 45px;
+    margin-right: clamp(32px, 10.069vw, 145px);
+    margin-left: clamp(32px, 10.069vw, 145px);
+    min-height: 900px;
+    transform: rotate(2deg);
+  }
+
+  .layer-shell--archive.layer-shell--flow .layer-field--active {
+    min-height: 1605px;
+    transform: rotate(0.5deg);
+  }
+
+  /* About has three edge sheets; Projects uses the open right edge. */
+  .layer-shell--about .edge-layer--projects {
+    top: 102px;
+    right: 0;
+    left: auto;
+  }
+
   .layer-shell--article .layer-shell__stage {
     min-height: 1848px;
   }
@@ -408,6 +447,51 @@
   .layer-shell--about .edge-layer--about {
     top: -12px;
     right: -1px;
+  }
+
+  .layer-shell--about .edge-layer--daily {
+    top: -12px;
+    right: -1px;
+    left: auto;
+  }
+
+  .layer-shell--about .edge-layer--projects {
+    top: 165px;
+    right: auto;
+    left: 9px;
+  }
+
+  .layer-shell--about .edge-layer--archive {
+    top: 345px;
+    right: auto;
+    left: 9px;
+  }
+
+  .layer-shell--archive .edge-layer--daily {
+    top: 345px;
+    right: auto;
+    left: 9px;
+  }
+
+  .layer-shell--flow .layer-shell__stage {
+    min-height: 0;
+    padding-bottom: 4rem;
+  }
+
+  .layer-shell--flow .layer-field--active {
+    position: relative;
+    top: 0;
+    right: auto;
+    left: auto;
+    width: auto;
+    min-height: 0;
+    margin: 15px 18px 0;
+  }
+
+  .layer-shell--about.layer-shell--flow .layer-field--active,
+  .layer-shell--archive.layer-shell--flow .layer-field--active {
+    min-height: 0;
+    transform: rotate(var(--rotation, 0deg));
   }
 
   .layer-shell--article .edge-layer--archive {
