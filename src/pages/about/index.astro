@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HiddenPaper from '../../components/HiddenPaper.astro';
 import LayerShell from '../../components/layers/LayerShell.astro';
 import { aboutContent } from '../../data/about';
 
@@ -120,5 +121,14 @@ const [whatSection, whySection, meSection, shortSection, currentSection, futureS
         </aside>
       </div>
     </div>
+
   </LayerShell>
+
+  <HiddenPaper
+    position="about"
+    contentZh="在 2026 年重新搭了一遍。"
+    contentEn="Rebuilt in 2026."
+    rotation="-3deg"
+    variant="about"
+  />
 </BaseLayout>

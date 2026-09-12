@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HiddenPaper from '../../components/HiddenPaper.astro';
 import LayerShell from '../../components/layers/LayerShell.astro';
 import { dailyHref } from '../../data/daily';
 
@@ -92,6 +93,17 @@ const years = [...new Set(archiveItems.map((item) => item.year))].sort((a, b) =>
           {years.length}
           <span data-i18n-zh=" 年" data-i18n-en=" YEARS"> 年</span>
         </p>
+        <button
+          class="archive-random"
+          type="button"
+          data-random-pick
+          aria-label="随便抽一张"
+          data-i18n-aria-zh="随便抽一张"
+          data-i18n-aria-en="Pick something"
+        >
+          <span data-i18n-zh="随便抽一张" data-i18n-en="PICK SOMETHING">随便抽一张</span>
+          <span aria-hidden="true"> ↗</span>
+        </button>
       </header>
 
       <div class="archive-board" aria-label="档案碎片" data-i18n-aria-zh="档案碎片" data-i18n-aria-en="Archive fragments">
@@ -120,5 +132,14 @@ const years = [...new Set(archiveItems.map((item) => item.year))].sort((a, b) =>
         {years.map((year) => <a class="archive-year" href={`#archive-${year}`}>{year}</a>)}
       </nav>
     </div>
+
   </LayerShell>
+
+  <HiddenPaper
+    position="archive"
+    contentZh="第一层：2023。"
+    contentEn="First layer: 2023."
+    rotation="2deg"
+    variant="archive"
+  />
 </BaseLayout>

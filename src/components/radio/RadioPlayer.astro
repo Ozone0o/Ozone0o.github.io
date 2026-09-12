@@ -1,0 +1,104 @@
+---
+import { radioPlaylist } from './playlist';
+
+const initialTrack = radioPlaylist[0];
+---
+
+<aside class="radio-player" data-radio-root data-radio-state="paused" data-radio-playing="false">
+  <button
+    class="radio-player__tab"
+    type="button"
+    data-radio-toggle-panel
+    aria-expanded="false"
+    aria-controls="ozone-radio-panel"
+    aria-label="打开 Ozone Radio"
+    data-i18n-aria-zh="打开 Ozone Radio"
+    data-i18n-aria-en="Open Ozone Radio"
+  >
+    <span data-i18n-zh="RADIO" data-i18n-en="RADIO">RADIO</span>
+    <span aria-hidden="true">▶</span>
+  </button>
+
+  <section
+    class="radio-player__panel"
+    id="ozone-radio-panel"
+    data-radio-panel
+    aria-label="Ozone Radio"
+    data-i18n-aria-zh="Ozone Radio"
+    data-i18n-aria-en="Ozone Radio"
+    hidden
+  >
+    <header class="radio-player__header">
+      <div>
+        <p class="radio-player__eyebrow" data-i18n-zh="OZONE RADIO" data-i18n-en="OZONE RADIO">OZONE RADIO</p>
+        <p class="radio-player__state" data-radio-status data-radio-status-key="paused">PAUSED</p>
+      </div>
+      <button
+        class="radio-player__close"
+        type="button"
+        data-radio-toggle-panel
+        aria-label="收起 Ozone Radio"
+        data-i18n-aria-zh="收起 Ozone Radio"
+        data-i18n-aria-en="Collapse Ozone Radio"
+      >×</button>
+    </header>
+
+    <div class="radio-player__track" aria-live="polite">
+      <p class="radio-player__title" data-radio-title>{initialTrack.title}</p>
+      <p class="radio-player__artist" data-radio-artist>{initialTrack.artist}</p>
+    </div>
+
+    <div class="radio-player__progress">
+      <label class="sr-only" for="ozone-radio-progress">
+        <span data-i18n-zh="播放进度" data-i18n-en="Playback progress">播放进度</span>
+      </label>
+      <input id="ozone-radio-progress" class="radio-player__range" data-radio-progress type="range" min="0" max="0" step="0.01" value="0" />
+      <div class="radio-player__time" aria-hidden="true">
+        <span data-radio-current-time>0:00</span>
+        <span>/</span>
+        <span data-radio-duration>0:00</span>
+      </div>
+    </div>
+
+    <div class="radio-player__transport" aria-label="播放控制" data-i18n-aria-zh="播放控制" data-i18n-aria-en="Playback controls">
+      <button
+        class="radio-player__button"
+        type="button"
+        data-radio-control="previous"
+        aria-label="上一首"
+        data-i18n-aria-zh="上一首"
+        data-i18n-aria-en="Previous track"
+      >←</button>
+      <button
+        class="radio-player__button radio-player__button--main"
+        type="button"
+        data-radio-control="toggle"
+        aria-label="播放"
+        data-i18n-aria-zh="播放"
+        data-i18n-aria-en="Play"
+      >
+        <span data-radio-play-label data-i18n-zh="播放" data-i18n-en="PLAY">播放</span>
+        <span data-radio-pause-label data-i18n-zh="暂停" data-i18n-en="PAUSE">暂停</span>
+      </button>
+      <button
+        class="radio-player__button"
+        type="button"
+        data-radio-control="next"
+        aria-label="下一首"
+        data-i18n-aria-zh="下一首"
+        data-i18n-aria-en="Next track"
+      >→</button>
+    </div>
+
+    <div class="radio-player__volume">
+      <label for="ozone-radio-volume">
+        <span data-i18n-zh="音量" data-i18n-en="VOLUME">音量</span>
+      </label>
+      <input id="ozone-radio-volume" class="radio-player__range" data-radio-volume type="range" min="0" max="1" step="0.01" value="0.3" />
+    </div>
+
+    <audio data-radio-audio preload="metadata" aria-hidden="true"></audio>
+  </section>
+</aside>
+
+<script src="../../scripts/radio.ts"></script>

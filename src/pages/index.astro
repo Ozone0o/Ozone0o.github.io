@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HiddenPaper from '../components/HiddenPaper.astro';
 import LayerField from '../components/layers/LayerField.astro';
 import LayerLabel from '../components/layers/LayerLabel.astro';
 import LayerShell from '../components/layers/LayerShell.astro';
@@ -138,5 +139,14 @@ const preview = (value?: string) => {
         </p>
       </div>
     </LayerField>
+
   </LayerShell>
+
+  <HiddenPaper
+    position="home"
+    contentZh="这个站以前是 Hexo + NexT。"
+    contentEn="This site used to be Hexo + NexT."
+    rotation="-2deg"
+    variant="plain"
+  />
 </BaseLayout>

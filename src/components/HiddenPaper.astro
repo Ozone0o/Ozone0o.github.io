@@ -1,0 +1,41 @@
+---
+interface Props {
+  position: 'home' | 'archive' | 'about';
+  contentZh: string;
+  contentEn: string;
+  rotation?: string;
+  variant?: 'plain' | 'archive' | 'about';
+}
+
+const {
+  position,
+  contentZh,
+  contentEn,
+  rotation = '-2deg',
+  variant = 'plain',
+} = Astro.props;
+const side = position === 'archive' ? 'right' : 'left';
+const noteId = `hidden-paper-${position}`;
+---
+
+<aside
+  class:list={['hidden-paper', `hidden-paper--${position}`, `hidden-paper--${side}`, `hidden-paper--${variant}`]}
+  style={`--hidden-paper-rotation: ${rotation};`}
+  data-hidden-paper
+  data-hidden-paper-state="closed"
+>
+  <button
+    class="hidden-paper__tab"
+    type="button"
+    data-hidden-paper-toggle
+    aria-expanded="false"
+    aria-controls={noteId}
+    aria-label="打开隐藏笔记"
+    data-i18n-aria-zh="打开隐藏笔记"
+    data-i18n-aria-en="Open hidden note"
+  ><span aria-hidden="true"></span></button>
+  <div class="hidden-paper__note" id={noteId} data-hidden-paper-note aria-hidden="true">
+    <p class="hidden-paper__eyebrow" data-i18n-zh="NOTE" data-i18n-en="NOTE">NOTE</p>
+    <p class="hidden-paper__content" data-i18n-zh={contentZh} data-i18n-en={contentEn}>{contentZh}</p>
+  </div>
+</aside>

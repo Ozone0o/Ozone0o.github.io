@@ -1,5 +1,9 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
 import '../styles/global.css';
+import RadioPlayer from '../components/radio/RadioPlayer.astro';
+import ShortcutHelp from '../components/ShortcutHelp.astro';
+import { dailyHref } from '../data/daily';
 import { ui } from '../data/i18n';
 
 interface Props {
@@ -26,6 +30,24 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
 })
   .format(new Date())
   .replace('/', '.');
+const [writingEntries, dailyEntries] = await Promise.all([
+  getCollection('writing'),
+  getCollection('daily'),
+]);
+const randomPool = [
+  ...writingEntries.map((entry: CollectionEntry<'writing'>) => ({
+    type: 'writing' as const,
+    title: entry.data.title,
+    href: `/writing/${entry.data.slug}/`,
+    key: `writing:${entry.data.slug}`,
+  })),
+  ...dailyEntries.map((entry: CollectionEntry<'daily'>) => ({
+    type: 'daily' as const,
+    title: entry.data.legacyDateLabel ?? entry.data.date.toISOString().slice(0, 10),
+    href: dailyHref(entry),
+    key: `daily:${entry.id}`,
+  })),
+];
 ---
 
 <!doctype html>
@@ -147,6 +169,10 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
       <slot />
     </main>
 
+    <RadioPlayer />
+    <ShortcutHelp />
+    <script is:inline type="application/json" id="ozone-random-pool" set:html={JSON.stringify(randomPool).replaceAll('<', '\\u003c')} />
+
     <script is:inline>
       (() => {
         const root = document.documentElement;
@@ -210,5 +236,7 @@ const versionLabel = new Intl.DateTimeFormat('en-GB', {
         }
       })();
     </script>
+    <script src="../scripts/keyboard.ts"></script>
+    <script src="../scripts/hidden-paper.ts"></script>
   </body>
 </html>

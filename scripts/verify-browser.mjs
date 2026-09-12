@@ -82,6 +82,11 @@ try {
 
   const inspectPage = async (path, width, height, mobile) => {
     await navigate(path, width, height, mobile);
+    await evaluate(`(()=>{
+      const panel = document.querySelector('[data-radio-panel]');
+      if (panel && !panel.hidden) document.querySelector('.radio-player__close')?.click();
+      return true;
+    })()`);
     const metrics = JSON.parse(await evaluate(`JSON.stringify((()=>{
       const root = document.documentElement;
       const rect = (element) => {
@@ -103,10 +108,19 @@ try {
         projectHeader: rect(document.querySelector('.project-detail__header')),
         projectFacts: rect(document.querySelector('.project-detail__facts')),
         projectLinks: rect(document.querySelector('.project-detail__links')),
+        radioTab: rect(document.querySelector('.radio-player__tab')),
+        shortcutPaper: rect(document.querySelector('.shortcut-help__paper')),
+        hiddenTabs: [...document.querySelectorAll('.hidden-paper__tab')].map((element) => rect(element)),
       };
     })())`));
     const label = `${path} @ ${width}x${height}`;
     if (metrics.scrollWidth > width || metrics.bodyScrollWidth > width) failures.push(`${label}: horizontal overflow (${metrics.scrollWidth}/${metrics.bodyScrollWidth})`);
+    if (!metrics.radioTab || metrics.radioTab.left < -1 || metrics.radioTab.right > width + 1 || metrics.radioTab.bottom > height + 1) {
+      failures.push(`${label}: Radio tab exceeds viewport`);
+    }
+    if (metrics.hiddenTabs.some((tab) => tab.bottom > height + 1 || tab.top < -1)) {
+      failures.push(`${label}: Hidden Paper tab exceeds viewport (${JSON.stringify(metrics.hiddenTabs)})`);
+    }
     if (['/about/', '/projects/', '/daily/', '/archive/'].includes(path) && metrics.edgeCount !== 3) {
       failures.push(`${label}: expected 3 top-level edge layers, found ${metrics.edgeCount}`);
     }
@@ -154,11 +168,13 @@ try {
   };
 
   const desktopPaths = ['/', '/about/', '/projects/', '/projects/axiom/', '/archive/', '/daily/', '/daily/2024-01-16--2024-01-17/', '/writing/', '/writing/test/'];
-  for (const width of [1280, 1366, 1440, 1920]) {
-    for (const path of desktopPaths) await inspectPage(path, width, 900, false);
+  for (const [width, height] of [[1024, 768], [1280, 900], [1366, 768], [1440, 900], [1920, 900]]) {
+    for (const path of desktopPaths) await inspectPage(path, width, height, false);
   }
-  for (const path of ['/', '/about/', '/projects/', '/projects/axiom/', '/archive/', '/daily/', '/daily/2024-01-16--2024-01-17/', '/writing/', '/writing/test/']) {
-    await inspectPage(path, 390, 844, true);
+  for (const [width, height] of [[375, 812], [390, 844]]) {
+    for (const path of ['/', '/about/', '/projects/', '/projects/axiom/', '/archive/', '/daily/', '/daily/2024-01-16--2024-01-17/', '/writing/', '/writing/test/']) {
+      await inspectPage(path, width, height, true);
+    }
   }
 
   await navigate('/', 1440, 900, false);
@@ -205,8 +221,162 @@ try {
   const backToChinese = await evaluate('document.documentElement.dataset.lang');
   if (backToChinese !== 'zh') failures.push('Language toggle did not return to Chinese.');
   console.log('Browser i18n persistence: PASS');
+
+  await navigate('/', 1440, 900, false);
+  await evaluate(`(()=>{ localStorage.clear(); location.reload(); return true; })()`);
+  await sleep(650);
+  const radioDefault = JSON.parse(await evaluate(`JSON.stringify((()=>{
+    const root = document.querySelector('[data-radio-root]');
+    const audio = document.querySelector('[data-radio-audio]');
+    return {
+      paused: audio?.paused === true,
+      autoplay: audio?.autoplay === true || audio?.hasAttribute('autoplay'),
+      panelHidden: document.querySelector('[data-radio-panel]')?.hasAttribute('hidden') === true,
+      expanded: root?.dataset.radioExpanded ?? null,
+      state: root?.dataset.radioState ?? null,
+      hasSource: Boolean(audio?.getAttribute('src')),
+    };
+  })())`));
+  if (!radioDefault.paused || radioDefault.autoplay || !radioDefault.panelHidden || radioDefault.expanded !== 'false' || radioDefault.hasSource) {
+    failures.push(`Radio default state is invalid (${JSON.stringify(radioDefault)}).`);
+  }
+
+  const radioInteraction = JSON.parse(await evaluate(`JSON.stringify((()=>{
+    const tab = document.querySelector('.radio-player__tab');
+    tab?.click();
+    const panel = document.querySelector('[data-radio-panel]');
+    const panelOpen = panel?.hasAttribute('hidden') === false;
+    const panelBox = panel?.getBoundingClientRect();
+    const panelHit = panelBox ? document.elementFromPoint(panelBox.left + panelBox.width / 2, panelBox.top + panelBox.height / 2) : null;
+    const panelReceivesPointer = Boolean(panel && panelHit && (panelHit === panel || panel.contains(panelHit)));
+    const audio = document.querySelector('[data-radio-audio]');
+    document.querySelector('[data-radio-control="toggle"]')?.click();
+    const statusAfterPlay = document.querySelector('[data-radio-status]')?.textContent?.trim();
+    const activated = localStorage.getItem('ozone-radio-activated');
+    const volume = document.querySelector('[data-radio-volume]');
+    if (volume) {
+      volume.value = '0.7';
+      volume.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    const firstTitle = document.querySelector('[data-radio-title]')?.textContent;
+    document.querySelector('[data-radio-control="next"]')?.click();
+    const nextTitle = document.querySelector('[data-radio-title]')?.textContent;
+    document.querySelector('[data-radio-control="previous"]')?.click();
+    const previousTitle = document.querySelector('[data-radio-title]')?.textContent;
+    return {
+      panelOpen,
+      panelReceivesPointer,
+      statusAfterPlay,
+      paused: audio?.paused === true,
+      activated,
+      storedVolume: localStorage.getItem('ozone-radio-volume'),
+      firstTitle,
+      nextTitle,
+      previousTitle,
+      storedTrack: localStorage.getItem('ozone-radio-track'),
+      expanded: localStorage.getItem('ozone-radio-expanded'),
+    };
+  })())`));
+  if (!radioInteraction.panelOpen || !radioInteraction.panelReceivesPointer || radioInteraction.statusAfterPlay !== '暂不可播放' || !radioInteraction.paused || radioInteraction.activated !== 'true' || radioInteraction.storedVolume !== '0.7' || radioInteraction.firstTitle === radioInteraction.nextTitle || radioInteraction.firstTitle !== radioInteraction.previousTitle || radioInteraction.storedTrack !== '0' || radioInteraction.expanded !== 'true') {
+    failures.push(`Radio interaction validation failed (${JSON.stringify(radioInteraction)}).`);
+  }
+
+  const poolState = await evaluate(`(()=>{
+    const pool = JSON.parse(document.querySelector('#ozone-random-pool')?.textContent ?? '[]');
+    return {
+      total: pool.length,
+      writing: pool.filter((item) => item.type === 'writing').length,
+      daily: pool.filter((item) => item.type === 'daily').length,
+      fragment: pool.filter((item) => item.type === 'fragment').length,
+      valid: pool.every((item) => item.href.startsWith('/writing/') || item.href.startsWith('/daily/')),
+    };
+  })()`);
+  if (poolState.total !== 41 || poolState.writing !== 14 || poolState.daily !== 27 || poolState.fragment !== 0 || !poolState.valid) {
+    failures.push(`Random pool validation failed (${JSON.stringify(poolState)}).`);
+  }
+
+  await navigate('/archive/', 1440, 900, false);
+  await evaluate(`document.querySelector('[data-random-pick]')?.click()`);
+  await sleep(650);
+  const buttonRandomPath = await evaluate('window.location.pathname');
+  if (!/^\/(writing|daily)\//u.test(buttonRandomPath)) failures.push(`Archive random button navigated to an invalid path: ${buttonRandomPath}`);
+
+  await navigate('/', 1440, 900, false);
+  await evaluate(`document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'r', bubbles: true }))`);
+  await sleep(650);
+  const shortcutRandomPath = await evaluate('window.location.pathname');
+  if (!/^\/(writing|daily)\//u.test(shortcutRandomPath)) failures.push(`R shortcut navigated to an invalid path: ${shortcutRandomPath}`);
+
+  const helpState = JSON.parse(await evaluate(`JSON.stringify((()=>{
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '?', bubbles: true }));
+    const help = document.querySelector('[data-shortcut-help]');
+    const open = help?.hasAttribute('hidden') === false;
+    const rows = help?.querySelectorAll('.shortcut-help__rows > div').length ?? 0;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    return { open, rows, closed: help?.hasAttribute('hidden') === true };
+  })())`));
+  if (!helpState.open || helpState.rows !== 7 || !helpState.closed) failures.push(`Shortcut help validation failed (${JSON.stringify(helpState)}).`);
+
+  await navigate('/', 1440, 900, false);
+  const hiddenHomeState = JSON.parse(await evaluate(`JSON.stringify((()=>{
+    const button = document.querySelector('.hidden-paper--home .hidden-paper__tab');
+    button?.focus();
+    const focused = document.activeElement === button;
+    button?.click();
+    const open = document.querySelector('.hidden-paper--home')?.dataset.hiddenPaperState === 'open';
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    const closed = document.querySelector('.hidden-paper--home')?.dataset.hiddenPaperState === 'closed';
+    return { focused, open, closed, label: button?.getAttribute('aria-label') };
+  })())`));
+  if (!hiddenHomeState.focused || !hiddenHomeState.open || !hiddenHomeState.closed || hiddenHomeState.label !== '打开隐藏笔记') {
+    failures.push(`Hidden Paper validation failed (${JSON.stringify(hiddenHomeState)}).`);
+  }
+
+  await navigate('/about/', 1440, 900, false);
+  const inputShortcutState = JSON.parse(await evaluate(`JSON.stringify((()=>{
+    const input = document.createElement('input');
+    document.body.append(input);
+    input.focus();
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', bubbles: true }));
+    const path = window.location.pathname;
+    input.remove();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'r', ctrlKey: true, bubbles: true }));
+    return { path, modifierKeptPath: window.location.pathname };
+  })())`));
+  if (inputShortcutState.path !== '/about/' || inputShortcutState.modifierKeptPath !== '/about/') {
+    failures.push(`Editable/modifier keyboard guard failed (${JSON.stringify(inputShortcutState)}).`);
+  }
+
+  const shortcutRoutes = [['h', '/'], ['p', '/projects/'], ['d', '/daily/'], ['a', '/archive/']];
+  for (const [key, expected] of shortcutRoutes) {
+    await navigate('/about/', 1440, 900, false);
+    await evaluate(`document.body.dispatchEvent(new KeyboardEvent('keydown', { key: ${JSON.stringify(key)}, bubbles: true }))`);
+    await sleep(650);
+    const route = await evaluate('window.location.pathname');
+    if (route !== expected) failures.push(`Keyboard ${key.toUpperCase()} navigated to ${route}, expected ${expected}.`);
+  }
+
+  await navigate('/not-a-real-route/', 1440, 900, false);
+  const notFoundDesktop = JSON.parse(await evaluate(`JSON.stringify({
+    paper: Boolean(document.querySelector('.not-found__paper')),
+    heading: document.querySelector('.not-found h1')?.textContent?.trim(),
+    link: document.querySelector('.not-found__link')?.getAttribute('href'),
+  })`));
+  if (!notFoundDesktop.paper || notFoundDesktop.heading !== '你掉出了这一层。' || notFoundDesktop.link !== '/') {
+    failures.push(`Custom 404 desktop validation failed (${JSON.stringify(notFoundDesktop)}).`);
+  }
+  await navigate('/not-a-real-route/', 375, 812, true);
+  const notFoundMobile = await evaluate(`(()=>{
+    const root = document.documentElement;
+    const paper = document.querySelector('.not-found__paper')?.getBoundingClientRect();
+    return { paper: Boolean(paper), overflow: root.scrollWidth > innerWidth, right: paper?.right ?? 0 };
+  })()`);
+  if (!notFoundMobile.paper || notFoundMobile.overflow || notFoundMobile.right > 376) {
+    failures.push(`Custom 404 mobile validation failed (${JSON.stringify(notFoundMobile)}).`);
+  }
+  console.log('Phase 2.3 interaction validation: PASS');
 } catch (error) {
-  failures.push(error.message);
+  failures.push(error.stack ?? error.message);
 } finally {
   socket?.close();
   browser.kill();

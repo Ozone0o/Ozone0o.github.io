@@ -2,13 +2,6 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape' || window.location.pathname === '/') return;
-  const target = event.target as HTMLElement | null;
-  if (target?.matches('input, textarea, select, [contenteditable="true"]')) return;
-  window.location.assign('/');
-});
-
 document.querySelectorAll<HTMLElement>('[data-layer-root]').forEach((root) => {
   root.querySelectorAll<HTMLElement>('[data-draggable-layer="true"]').forEach((layer) => {
     let pointerId: number | null = null;
